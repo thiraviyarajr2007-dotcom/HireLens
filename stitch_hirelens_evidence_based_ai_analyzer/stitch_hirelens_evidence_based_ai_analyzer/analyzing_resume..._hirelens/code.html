@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireLens - Processing Candidate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#0b1c30",
+                      "primary": "#004ac6",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "tertiary-container": "#0f69dc",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "secondary": "#00687a",
+                      "on-surface-variant": "#434655",
+                      "on-primary-container": "#eeefff",
+                      "surface-dim": "#cbdbf5",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#001a42",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#001f26",
+                      "inverse-on-surface": "#eaf1ff",
+                      "secondary-container": "#57dffe",
+                      "surface-container-highest": "#d3e4fe",
+                      "inverse-surface": "#213145",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "surface-tint": "#0053db",
+                      "primary-fixed": "#dbe1ff",
+                      "on-primary-fixed": "#00174b",
+                      "outline": "#737686",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "surface-bright": "#f8f9ff",
+                      "inverse-primary": "#b4c5ff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#acedff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-secondary-container": "#006172",
+                      "on-tertiary-fixed-variant": "#004395",
+                      "surface-container-low": "#eff4ff",
+                      "primary-container": "#2563eb",
+                      "surface-variant": "#d3e4fe",
+                      "background": "#f8f9ff",
+                      "on-tertiary-container": "#edf0ff",
+                      "on-surface": "#0b1c30",
+                      "tertiary-fixed-dim": "#adc6ff",
+                      "on-tertiary": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "surface-container-high": "#dce9ff",
+                      "tertiary": "#0051b1",
+                      "tertiary-fixed": "#d8e2ff",
+                      "surface-container": "#e5eeff",
+                      "on-secondary-fixed-variant": "#004e5c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1440px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "3xl": "64px",
+                      "sidebar-width": "280px",
+                      "xs": "4px",
+                      "base": "4px",
+                      "2xl": "48px",
+                      "lg": "24px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "display": ["Geist"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-lg-mobile": ["Geist"],
+                      "headline-sm": ["Geist"],
+                      "label-sm": ["Geist"],
+                      "label-md": ["Geist"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Geist"],
+                      "headline-md": ["Geist"]
+              },
+              "fontSize": {
+                      "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .loading-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .scrolling-bg {
+            background-image: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 25%, transparent 25%, transparent 50%, rgba(248, 250, 252, 0.8) 50%, rgba(248, 250, 252, 0.8) 75%, transparent 75%, transparent);
+            background-size: 40px 40px;
+            animation: scroll-bg 2s linear infinite;
+        }
+        @keyframes scroll-bg {
+            100% { background-position: 40px 40px; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="w-[280px] h-screen fixed left-0 top-0 bg-on-background dark:bg-on-background bg-on-background flex flex-col h-full w-[280px] py-xl z-50 hidden md:flex">
+<div class="px-xl mb-2xl">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-headline-md font-display font-bold text-white" data-weight="fill">lens</span>
+<div>
+<h1 class="text-headline-sm font-display font-bold text-white">HireLens</h1>
+<p class="text-label-sm font-label-sm text-primary-fixed-dim dark:text-primary-fixed-dim">AI Intelligence</p>
+</div>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-sm px-md">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/5 transition-colors hover:bg-white/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Active State: Analyze Resume -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg border-l-4 border-primary bg-white/10 text-white font-bold hover:bg-white/10 transition-all duration-200 scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="psychology" data-weight="fill" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-label-md text-label-md">Analyze Resume</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/5 transition-colors hover:bg-white/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Candidates</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/5 transition-colors hover:bg-white/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-label-md text-label-md">Rankings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/5 transition-colors hover:bg-white/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/5 transition-colors hover:bg-white/10 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="px-md mt-auto">
+<div class="flex items-center gap-md px-md py-sm rounded-lg bg-surface-tint/20 text-primary-fixed-dim">
+<span class="material-symbols-outlined text-green-400" data-icon="check_circle">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md">System Status</span>
+<span class="font-label-sm text-label-sm text-white/50">System Online</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-[280px] p-md md:p-xl max-w-container-max mx-auto w-full min-h-screen flex flex-col justify-center items-center relative overflow-hidden">
+<!-- Abstract Tech Background Element -->
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none flex justify-center items-center">
+<div class="w-[800px] h-[800px] rounded-full border border-primary/10 border-dashed animate-[spin_60s_linear_infinite]"></div>
+<div class="absolute w-[600px] h-[600px] rounded-full border border-tertiary-container/20 border-dashed animate-[spin_40s_linear_infinite_reverse]"></div>
+</div>
+<!-- Processing Container -->
+<div class="relative z-10 w-full max-w-2xl bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-lg md:p-2xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_10px_10px_-5px_rgba(0,0,0,0.04)]">
+<!-- Header -->
+<div class="text-center mb-xl">
+<div class="inline-flex items-center justify-center w-3xl h-3xl rounded-full bg-primary-container/10 mb-lg relative">
+<div class="absolute inset-0 rounded-full border-2 border-primary/20 loading-pulse"></div>
+<span class="material-symbols-outlined text-primary text-headline-lg" data-icon="psychology">psychology</span>
+</div>
+<h2 class="font-display text-headline-lg font-headline-lg text-on-surface mb-sm">Analyzing Candidate...</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">We're extracting and verifying information from the resume against the intelligence matrix.</p>
+</div>
+<!-- Pipeline Steps -->
+<div class="space-y-sm">
+<!-- Step 1: Complete -->
+<div class="flex items-center gap-md p-md rounded-lg bg-surface-container/30 border border-transparent transition-all">
+<div class="w-lg h-lg rounded-full bg-green-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-green-700 text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface opacity-70">Resume uploaded</span>
+</div>
+<!-- Step 2: Complete -->
+<div class="flex items-center gap-md p-md rounded-lg bg-surface-container/30 border border-transparent transition-all">
+<div class="w-lg h-lg rounded-full bg-green-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-green-700 text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface opacity-70">Extracting text</span>
+</div>
+<!-- Step 3: Complete -->
+<div class="flex items-center gap-md p-md rounded-lg bg-surface-container/30 border border-transparent transition-all">
+<div class="w-lg h-lg rounded-full bg-green-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-green-700 text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface opacity-70">Detecting resume sections</span>
+</div>
+<!-- Step 4: Complete -->
+<div class="flex items-center gap-md p-md rounded-lg bg-surface-container/30 border border-transparent transition-all">
+<div class="w-lg h-lg rounded-full bg-green-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-green-700 text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface opacity-70">Extracting candidate fields</span>
+</div>
+<!-- Step 5: Active / Loading -->
+<div class="flex items-center gap-md p-md rounded-lg bg-inverse-on-surface border border-primary/20 shadow-sm relative overflow-hidden">
+<!-- Progress Bar Background Effect -->
+<div class="absolute bottom-0 left-0 h-1 bg-primary w-2/3 transition-all duration-1000 ease-in-out"></div>
+<div class="w-lg h-lg rounded-full border-2 border-primary border-t-transparent animate-spin flex items-center justify-center shrink-0"></div>
+<div class="flex-1">
+<span class="font-label-md text-label-md text-on-surface block">Verifying evidence</span>
+<span class="font-label-sm text-label-sm text-primary opacity-80">Cross-referencing historical data...</span>
+</div>
+</div>
+<!-- Step 6: Pending -->
+<div class="flex items-center gap-md p-md rounded-lg border border-transparent opacity-50">
+<div class="w-lg h-lg rounded-full border-2 border-outline-variant flex items-center justify-center shrink-0"></div>
+<span class="font-body-md text-body-md text-on-surface-variant">Comparing with job description</span>
+</div>
+<!-- Step 7: Pending -->
+<div class="flex items-center gap-md p-md rounded-lg border border-transparent opacity-50">
+<div class="w-lg h-lg rounded-full border-2 border-outline-variant flex items-center justify-center shrink-0"></div>
+<span class="font-body-md text-body-md text-on-surface-variant">Generating fit report</span>
+</div>
+</div>
+<!-- Global Progress Indicator -->
+<div class="mt-xl pt-lg border-t border-outline-variant/30 flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">Analysis Progress</span>
+<span class="font-label-md text-label-md text-primary font-bold">57%</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded-full mt-sm overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500 w-[57%] relative">
+<div class="absolute inset-0 bg-white/20 scrolling-bg"></div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Subtle interaction for the active loading state to simulate progress
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.querySelector('.bg-primary.w-2\\/3');
+            const percentText = document.querySelector('.text-primary.font-bold');
+            const globalProgress = document.querySelector('.w-\\[57\\%\\]');
+            
+            if(progressBar && percentText && globalProgress) {
+                let progress = 57;
+                setInterval(() => {
+                    // Simulate non-linear progress
+                    if(Math.random() > 0.5 && progress < 72) {
+                        progress += Math.random() * 2;
+                        const newWidth = `${Math.min(progress, 100).toFixed(0)}%`;
+                        progressBar.style.width = newWidth;
+                        globalProgress.style.width = newWidth;
+                        percentText.textContent = newWidth;
+                    }
+                }, 1500);
+            }
+        });
+    </script>
+</body></html>

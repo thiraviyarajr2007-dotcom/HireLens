@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireLens - Evidence Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#0b1c30",
+                      "primary": "#004ac6",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "tertiary-container": "#0f69dc",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "secondary": "#00687a",
+                      "on-surface-variant": "#434655",
+                      "on-primary-container": "#eeefff",
+                      "surface-dim": "#cbdbf5",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#001a42",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#001f26",
+                      "inverse-on-surface": "#eaf1ff",
+                      "secondary-container": "#57dffe",
+                      "surface-container-highest": "#d3e4fe",
+                      "inverse-surface": "#213145",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "surface-tint": "#0053db",
+                      "primary-fixed": "#dbe1ff",
+                      "on-primary-fixed": "#00174b",
+                      "outline": "#737686",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "surface-bright": "#f8f9ff",
+                      "inverse-primary": "#b4c5ff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#acedff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-secondary-container": "#006172",
+                      "on-tertiary-fixed-variant": "#004395",
+                      "surface-container-low": "#eff4ff",
+                      "primary-container": "#2563eb",
+                      "surface-variant": "#d3e4fe",
+                      "background": "#f8f9ff",
+                      "on-tertiary-container": "#edf0ff",
+                      "on-surface": "#0b1c30",
+                      "tertiary-fixed-dim": "#adc6ff",
+                      "on-tertiary": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "surface-container-high": "#dce9ff",
+                      "tertiary": "#0051b1",
+                      "tertiary-fixed": "#d8e2ff",
+                      "surface-container": "#e5eeff",
+                      "on-secondary-fixed-variant": "#004e5c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1440px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "3xl": "64px",
+                      "sidebar-width": "280px",
+                      "xs": "4px",
+                      "base": "4px",
+                      "2xl": "48px",
+                      "lg": "24px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "display": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Geist"
+                      ],
+                      "headline-sm": [
+                              "Geist"
+                      ],
+                      "label-sm": [
+                              "Geist"
+                      ],
+                      "label-md": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .shadow-level-1 {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .shadow-level-2 {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen overflow-hidden flex">
+<!-- SideNavBar -->
+<nav class="w-sidebar-width h-screen fixed left-0 top-0 bg-on-background text-primary-fixed-dim flex flex-col py-xl z-50">
+<!-- Brand Header -->
+<div class="px-lg mb-xl flex items-center gap-sm">
+<div class="w-10 h-10 rounded bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">lens</span>
+</div>
+<div>
+<h1 class="text-headline-md font-display font-bold text-white">HireLens</h1>
+<p class="font-label-sm text-label-sm text-white/70 uppercase tracking-widest">AI Intelligence</p>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="flex-1 px-sm space-y-1">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/10 transition-all duration-200 hover:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg border-l-4 border-primary bg-white/10 text-white font-bold transition-all duration-200 scale-95" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-md text-label-md">Analyze Resume</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/10 transition-all duration-200 hover:scale-95" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-md text-label-md">Candidates</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/10 transition-all duration-200 hover:scale-95" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-md text-label-md">Rankings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/10 transition-all duration-200 hover:scale-95" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-white/70 hover:bg-white/10 transition-all duration-200 hover:scale-95" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<!-- Footer -->
+<div class="px-lg mt-auto">
+<div class="pt-md border-t border-white/10">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-green-400 text-sm">check_circle</span>
+<span class="font-label-sm text-label-sm text-white/70">System Status</span>
+</div>
+<button class="w-full py-sm px-md bg-white/10 hover:bg-white/20 text-white rounded font-label-md text-label-md transition-colors flex items-center justify-center gap-sm">
+                    System Online
+                </button>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-sidebar-width flex-1 h-screen flex flex-col bg-background">
+<!-- Top App Bar equivalent header area for the specific view -->
+<header class="h-16 px-xl flex items-center justify-between border-b border-outline-variant bg-surface sticky top-0 z-40">
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center w-8 h-8 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Evidence Explorer</h2>
+<p class="font-body-sm text-body-sm text-outline">Candidate: Alex Mercer</p>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<button class="text-outline hover:text-primary transition-colors flex items-center gap-sm font-label-md text-label-md">
+<span class="material-symbols-outlined">download</span> Export Report
+                </button>
+<div class="w-px h-6 bg-outline-variant"></div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-green-600 bg-green-50 px-sm py-xs rounded border border-green-200/50 flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">verified</span> Analysis Complete
+                </span>
+</div>
+</header>
+<!-- Split View Layout -->
+<div class="flex-1 flex overflow-hidden p-md gap-md">
+<!-- Left Side: Resume Preview -->
+<div class="w-1/2 bg-surface rounded-2xl shadow-level-1 border border-outline-variant/30 flex flex-col overflow-hidden relative">
+<!-- Decorative Top Edge -->
+<div class="h-1 w-full bg-gradient-to-r from-surface-variant via-outline-variant to-surface-variant opacity-50"></div>
+<div class="p-md border-b border-outline-variant/30 flex justify-between items-center bg-surface-bright z-10">
+<h3 class="font-label-md text-label-md text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">description</span> Source Document
+                    </h3>
+<div class="flex gap-xs">
+<button class="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-outline"><span class="material-symbols-outlined text-sm">zoom_in</span></button>
+<button class="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-outline"><span class="material-symbols-outlined text-sm">zoom_out</span></button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-lg bg-surface relative">
+<!-- Faux Document Content -->
+<div class="max-w-3xl mx-auto bg-white min-h-full border border-outline-variant/20 shadow-sm p-xl font-body-sm text-on-surface-variant leading-relaxed space-y-6">
+<div class="border-b-2 border-outline-variant/30 pb-md mb-md">
+<h2 class="text-headline-md font-display font-bold text-on-surface">Alex Mercer</h2>
+<p>Senior Full-Stack Engineer | Seattle, WA | alex.mercer@email.com</p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md uppercase text-outline mb-sm tracking-wider">Summary</h4>
+<p>Experienced software engineer with 7+ years of building scalable web applications and distributed systems. Passionate about performance optimization and modern architectural patterns.</p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md uppercase text-outline mb-sm tracking-wider">Technical Skills</h4>
+<p class="leading-loose">
+<strong>Languages:</strong> JavaScript, Python, Go, Java<br/>
+<!-- Highlighted evidence section in document -->
+<span class="bg-[#06B6D4]/10 border border-[#06B6D4]/30 rounded px-1 -mx-1 relative group cursor-pointer inline-block">
+<span class="absolute -top-6 left-0 bg-[#06B6D4] text-white font-label-sm text-[10px] px-2 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Evidence Match</span>
+                                    Proficient in React, Node.js, TypeScript, and Docker for scalable web applications.
+                                </span><br/>
+<strong>Databases:</strong> PostgreSQL, MongoDB, Redis<br/>
+<strong>Cloud:</strong> AWS (EC2, S3, Lambda), GCP
+                            </p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md uppercase text-outline mb-sm tracking-wider">Experience</h4>
+<div class="mb-4">
+<h5 class="font-bold text-on-surface">TechFlow Inc. — Senior Engineer</h5>
+<p class="text-sm text-outline mb-1">2020 - Present</p>
+<ul class="list-disc pl-5 space-y-1">
+<li>Architected and migrated legacy monolith to microservices using Node.js and Docker.</li>
+<li>Improved database query performance by 40% through indexing and caching strategies.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Evidence Details Panel -->
+<div class="w-1/2 flex flex-col gap-md">
+<!-- Main Evidence Card -->
+<div class="bg-surface rounded-2xl shadow-level-1 border border-outline-variant/30 flex flex-col overflow-hidden">
+<!-- Card Header (Meta) -->
+<div class="p-lg border-b border-outline-variant/30 bg-surface-bright flex justify-between items-start">
+<div>
+<p class="font-label-sm text-label-sm text-outline tracking-wider uppercase mb-xs">FIELD ID: SKILLS-LIST</p>
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-sm">
+                                Skills
+                                <!-- Found Badge -->
+<span class="ml-sm font-label-sm text-[11px] uppercase tracking-wider bg-green-500/10 text-green-700 border border-green-500/20 px-2 py-1 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Found
+                                </span>
+</h3>
+</div>
+<!-- Confidence Score Ring -->
+<div class="relative w-12 h-12 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-slate-100 stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"></path>
+<path class="text-[#06B6D4] stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="98, 100" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display font-bold text-[10px] text-on-surface">98%</span>
+</div>
+</div>
+</div>
+<!-- Card Body -->
+<div class="p-lg space-y-xl bg-surface flex-1">
+<!-- Extracted Value -->
+<div>
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-sm">Extracted Value</p>
+<div class="flex flex-wrap gap-sm">
+<span class="bg-surface-container-low text-primary px-sm py-xs rounded font-label-md text-label-md border border-primary/20">React</span>
+<span class="bg-surface-container-low text-primary px-sm py-xs rounded font-label-md text-label-md border border-primary/20">Node.js</span>
+<span class="bg-surface-container-low text-primary px-sm py-xs rounded font-label-md text-label-md border border-primary/20">TypeScript</span>
+</div>
+</div>
+<div class="w-full h-px bg-outline-variant/30"></div>
+<!-- Evidence Context -->
+<div>
+<div class="flex justify-between items-end mb-sm">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Source Evidence Context</p>
+<span class="text-xs text-outline font-medium bg-surface-variant px-2 py-0.5 rounded">Section: Technical Skills</span>
+</div>
+<div class="p-md rounded-lg bg-surface-bright border border-outline-variant/50 relative group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[#06B6D4] rounded-l-lg opacity-70"></div>
+<p class="font-body-md text-on-surface-variant leading-relaxed">
+                                    "<span class="bg-[#06B6D4]/10 text-on-surface font-medium border-b border-[#06B6D4]/40 px-1">Proficient in React, Node.js, TypeScript, and Docker for scalable web applications.</span>"
+                                </p>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="p-md border-t border-outline-variant/30 bg-surface flex justify-end gap-md">
+<button class="px-md py-sm rounded border border-outline text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">edit</span> Override
+                        </button>
+<button class="px-md py-sm rounded bg-primary text-white font-label-md text-label-md hover:bg-primary/90 transition-colors shadow-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">check</span> Accept Extraction
+                        </button>
+</div>
+</div>
+<!-- Additional Context/Logs Card (Secondary Info) -->
+<div class="bg-surface rounded-2xl shadow-level-1 border border-outline-variant/30 flex-1 overflow-hidden flex flex-col">
+<div class="p-md border-b border-outline-variant/30 bg-surface-bright">
+<h4 class="font-label-md text-label-md text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">memory</span> AI Reasoning Log
+                         </h4>
+</div>
+<div class="p-md overflow-y-auto flex-1 font-body-sm text-on-surface-variant space-y-4">
+<div class="flex gap-md">
+<div class="mt-1"><span class="w-2 h-2 rounded-full bg-outline block"></span></div>
+<div>
+<p class="font-medium text-on-surface">Semantic Match Detected</p>
+<p class="text-outline text-sm">Located keywords strongly correlated with requirement 'Frontend Stack' and 'Backend Runtime'.</p>
+</div>
+</div>
+<div class="flex gap-md">
+<div class="mt-1"><span class="w-2 h-2 rounded-full bg-green-500 block"></span></div>
+<div>
+<p class="font-medium text-on-surface">High Confidence Verification</p>
+<p class="text-outline text-sm">Contextual grammar confirms active usage rather than passive mention. Confidence score set to 98%.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

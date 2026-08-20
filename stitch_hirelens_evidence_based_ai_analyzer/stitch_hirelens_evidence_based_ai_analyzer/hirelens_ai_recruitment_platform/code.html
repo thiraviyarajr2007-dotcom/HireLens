@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireLens - AI Recruitment Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-weight: 300; }
+        .filled { font-variation-settings: 'FILL' 1; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#0b1c30",
+                      "primary": "#004ac6",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "tertiary-container": "#0f69dc",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "secondary": "#00687a",
+                      "on-surface-variant": "#434655",
+                      "on-primary-container": "#eeefff",
+                      "surface-dim": "#cbdbf5",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#001a42",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#001f26",
+                      "inverse-on-surface": "#eaf1ff",
+                      "secondary-container": "#57dffe",
+                      "surface-container-highest": "#d3e4fe",
+                      "inverse-surface": "#213145",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "surface-tint": "#0053db",
+                      "primary-fixed": "#dbe1ff",
+                      "on-primary-fixed": "#00174b",
+                      "outline": "#737686",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "surface-bright": "#f8f9ff",
+                      "inverse-primary": "#b4c5ff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#acedff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-secondary-container": "#006172",
+                      "on-tertiary-fixed-variant": "#004395",
+                      "surface-container-low": "#eff4ff",
+                      "primary-container": "#2563eb",
+                      "surface-variant": "#d3e4fe",
+                      "background": "#f8f9ff",
+                      "on-tertiary-container": "#edf0ff",
+                      "on-surface": "#0b1c30",
+                      "tertiary-fixed-dim": "#adc6ff",
+                      "on-tertiary": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "surface-container-high": "#dce9ff",
+                      "tertiary": "#0051b1",
+                      "tertiary-fixed": "#d8e2ff",
+                      "surface-container": "#e5eeff",
+                      "on-secondary-fixed-variant": "#004e5c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1440px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "3xl": "64px",
+                      "sidebar-width": "280px",
+                      "xs": "4px",
+                      "base": "4px",
+                      "2xl": "48px",
+                      "lg": "24px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "display": [
+                              "Geist"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Geist"
+                      ],
+                      "headline-sm": [
+                              "Geist"
+                      ],
+                      "label-sm": [
+                              "Geist"
+                      ],
+                      "label-md": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNav Shell - Suppressed for Landing Page as per instructions (Transactional/Linear flow context) -->
+<header class="w-full fixed top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-surface-variant transition-all duration-300">
+<div class="max-w-container-max mx-auto px-lg lg:px-2xl h-16 flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-[28px] filled" data-icon="psychology">psychology</span>
+<span class="font-display text-headline-sm font-bold text-on-surface tracking-tight">HireLens</span>
+</div>
+<nav class="hidden md:flex gap-lg items-center">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#features">Features</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#workflow">Workflow</a>
+<button class="bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md py-sm px-md rounded-lg transition-colors shadow-sm">Analyze Resume</button>
+</nav>
+</div>
+</header>
+<main class="pt-24 md:pt-32">
+<!-- Hero Section -->
+<section class="max-w-container-max mx-auto px-lg lg:px-2xl py-2xl lg:py-3xl flex flex-col lg:flex-row items-center gap-2xl">
+<div class="w-full lg:w-1/2 flex flex-col items-start gap-lg">
+<h1 class="font-display text-headline-lg-mobile md:text-display text-on-surface">Turn Resumes Into <span class="text-primary">Evidence-Backed</span> Hiring Decisions</h1>
+<p class="font-body-md text-body-lg text-on-surface-variant max-w-xl">Parse candidate resumes, extract structured profiles, and rank job fit with transparent evidence from the source document.</p>
+<div class="flex flex-wrap gap-md mt-sm">
+<button class="bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md py-sm px-lg rounded-lg transition-colors shadow-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[20px]" data-icon="upload_file">upload_file</span>
+                        Analyze a Resume
+                    </button>
+<button class="bg-surface hover:bg-surface-container-low text-primary border border-primary/20 font-label-md text-label-md py-sm px-lg rounded-lg transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[20px]" data-icon="play_circle">play_circle</span>
+                        View Demo
+                    </button>
+</div>
+<div class="mt-lg flex items-center gap-md text-on-surface-variant">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-surface-variant border-2 border-surface flex items-center justify-center text-[10px] font-bold">HR</div>
+<div class="w-8 h-8 rounded-full bg-primary-fixed border-2 border-surface flex items-center justify-center text-[10px] font-bold text-primary">TA</div>
+<div class="w-8 h-8 rounded-full bg-secondary-container border-2 border-surface flex items-center justify-center text-[10px] font-bold text-secondary">Rec</div>
+</div>
+<span class="font-label-sm text-label-sm">Trusted by top recruiting teams</span>
+</div>
+</div>
+<div class="w-full lg:w-1/2 relative">
+<!-- Abstract AI Graphic Representation -->
+<div class="relative w-full aspect-square md:aspect-[4/3] rounded-2xl bg-surface-container overflow-hidden shadow-sm border border-outline-variant/30 flex items-center justify-center p-xl">
+<img class="absolute inset-0 w-full h-full object-cover opacity-80" data-alt="A sleek, modern 3D abstract illustration depicting an AI recruitment process. A glowing digital document representing a resume is being scanned by high-tech laser lines. The data flows into a structured, glowing holographic candidate profile card displaying a high match percentage in bright cyan. The background is a clean, bright light-mode studio environment with subtle deep navy blue structural elements. Soft, diffused professional lighting highlights the polished, transparent glassmorphism style of the UI elements. High quality, ultra-detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-T1K0D4-ZWPLbjrq-1DAgpKXwf6tnkmu38zqmbwCZed8_HsAnFj60wQRSHA6pZwJUCMH28GfAoJiE6hER-NCLIxwhRyrLaTBbWfMsx01or4l3nOY59P7ChhgO7Pl-s8FCrxE7Sf4JFCTgga3j-kzc354XSokmr_VV2R36fZjgrCpL8QQPgAAmndHJwLeGpxX--NruKzfwl37bNCgRt0JAuX8jw6SM44UiEn_jXcZr53XJdWddqug"/>
+<!-- Overlay UI Elements for conceptual depth -->
+<div class="relative z-10 w-full max-w-sm flex flex-col gap-md">
+<div class="bg-surface/90 backdrop-blur-md p-md rounded-xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1)] border border-outline-variant/50 flex items-center gap-md transform -translate-x-4">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Input</div>
+<div class="font-label-md text-label-md text-on-surface">Senior_Dev_Resume.pdf</div>
+</div>
+</div>
+<div class="flex justify-center -my-2 relative z-20">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_downward">arrow_downward</span>
+</div>
+</div>
+<div class="bg-surface/95 backdrop-blur-xl p-md rounded-xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1)] border border-primary/30 ml-8">
+<div class="flex justify-between items-center mb-sm border-b border-surface-variant pb-sm">
+<span class="font-label-md text-label-md text-on-surface">Skill Extraction</span>
+<span class="bg-primary/10 text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full border border-primary/20">98% Match</span>
+</div>
+<div class="flex flex-wrap gap-xs">
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-2 py-1 rounded">React</span>
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-2 py-1 rounded">Node.js</span>
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-2 py-1 rounded">System Design</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="bg-surface py-2xl lg:py-3xl border-y border-surface-variant" id="features">
+<div class="max-w-container-max mx-auto px-lg lg:px-2xl">
+<div class="text-center mb-xl">
+<h2 class="font-display text-headline-md lg:text-headline-lg text-on-surface mb-sm">Intelligence Through Clarity</h2>
+<p class="font-body-md text-body-lg text-on-surface-variant max-w-2xl mx-auto">Stop guessing. Make objective decisions based on hard data extracted directly from the candidate's own words.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Feature 1 -->
+<div class="bg-background rounded-2xl p-lg border border-outline-variant/50 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-1px_rgba(0,0,0,0.03)] hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-md">
+<span class="material-symbols-outlined text-[24px]" data-icon="policy">policy</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Evidence-Backed</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Every extracted field is directly linked to supporting text in the original resume. Click any insight to see exactly where it came from.</p>
+</div>
+<!-- Feature 2 -->
+<div class="bg-background rounded-2xl p-lg border border-outline-variant/50 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-1px_rgba(0,0,0,0.03)] hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container mb-md">
+<span class="material-symbols-outlined text-[24px]" data-icon="join_inner">join_inner</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Intelligent Matching</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Compare candidate profiles against structured job requirements instantly. The AI understands semantic similarities, not just keyword matches.</p>
+</div>
+<!-- Feature 3 -->
+<div class="bg-background rounded-2xl p-lg border border-outline-variant/50 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-1px_rgba(0,0,0,0.03)] hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed mb-md">
+<span class="material-symbols-outlined text-[24px]" data-icon="score">score</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Transparent Scoring</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Understand exactly why a candidate matches or misses a requirement. Get clear, explainable scores that you can trust in hiring panels.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Workflow Section -->
+<section class="max-w-container-max mx-auto px-lg lg:px-2xl py-2xl lg:py-3xl" id="workflow">
+<div class="text-center mb-xl">
+<h2 class="font-display text-headline-md lg:text-headline-lg text-on-surface mb-sm">The Analysis Pipeline</h2>
+<p class="font-body-md text-body-lg text-on-surface-variant max-w-2xl mx-auto">A seamless workflow designed for high-stakes recruitment environments.</p>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center relative">
+<!-- Connecting Line (Desktop) -->
+<div class="hidden md:block absolute top-1/2 left-10 right-10 h-[2px] bg-surface-variant -translate-y-1/2 z-0"></div>
+<!-- Steps -->
+<div class="flex flex-col md:flex-row justify-between w-full gap-lg relative z-10">
+<div class="flex flex-col items-center text-center gap-sm bg-background p-sm">
+<div class="w-16 h-16 rounded-full bg-surface-container-high border-4 border-background flex items-center justify-center text-on-surface-variant shadow-sm">
+<span class="material-symbols-outlined text-[28px]" data-icon="upload">upload</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">1. Upload</span>
+</div>
+<div class="flex flex-col items-center text-center gap-sm bg-background p-sm">
+<div class="w-16 h-16 rounded-full bg-primary-container border-4 border-background flex items-center justify-center text-on-primary shadow-sm relative">
+<div class="absolute inset-0 rounded-full border-2 border-primary-container animate-ping opacity-20"></div>
+<span class="material-symbols-outlined text-[28px]" data-icon="memory">memory</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">2. Parse</span>
+</div>
+<div class="flex flex-col items-center text-center gap-sm bg-background p-sm">
+<div class="w-16 h-16 rounded-full bg-surface-container-high border-4 border-background flex items-center justify-center text-on-surface-variant shadow-sm">
+<span class="material-symbols-outlined text-[28px]" data-icon="rule">rule</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">3. Verify</span>
+</div>
+<div class="flex flex-col items-center text-center gap-sm bg-background p-sm">
+<div class="w-16 h-16 rounded-full bg-surface-container-high border-4 border-background flex items-center justify-center text-on-surface-variant shadow-sm">
+<span class="material-symbols-outlined text-[28px]" data-icon="compare_arrows">compare_arrows</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">4. Match</span>
+</div>
+<div class="flex flex-col items-center text-center gap-sm bg-background p-sm">
+<div class="w-16 h-16 rounded-full bg-surface-container-high border-4 border-background flex items-center justify-center text-on-surface-variant shadow-sm">
+<span class="material-symbols-outlined text-[28px]" data-icon="format_list_numbered">format_list_numbered</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">5. Rank</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-on-background text-surface-container-low py-2xl border-t border-inverse-surface/20">
+<div class="max-w-container-max mx-auto px-lg lg:px-2xl grid grid-cols-1 md:grid-cols-4 gap-xl">
+<div class="col-span-1 md:col-span-2">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[24px] filled" data-icon="psychology">psychology</span>
+<span class="font-display text-headline-sm font-bold text-white tracking-tight">HireLens</span>
+</div>
+<p class="font-body-sm text-body-sm text-surface-variant/70 max-w-sm mb-lg">
+                    AI Intelligence for high-stakes recruitment. Transform unstructured resumes into structured, evidence-backed hiring decisions.
+                </p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-white mb-md uppercase tracking-wider">Product</h4>
+<ul class="space-y-sm">
+<li><a class="font-body-sm text-body-sm text-surface-variant/70 hover:text-white transition-colors" href="#">Features</a></li>
+<li><a class="font-body-sm text-body-sm text-surface-variant/70 hover:text-white transition-colors" href="#">Security</a></li>
+<li><a class="font-body-sm text-body-sm text-surface-variant/70 hover:text-white transition-colors" href="#">Pricing</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-white mb-md uppercase tracking-wider">Company</h4>
+<ul class="space-y-sm">
+<li><a class="font-body-sm text-body-sm text-surface-variant/70 hover:text-white transition-colors" href="#">About</a></li>
+<li><a class="font-body-sm text-body-sm text-surface-variant/70 hover:text-white transition-colors" href="#">Contact</a></li>
+<li><a class="font-body-sm text-body-sm text-surface-variant/70 hover:text-white transition-colors" href="#">Privacy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-lg lg:px-2xl mt-xl pt-lg border-t border-inverse-surface/30 flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-surface-variant/50">© 2024 HireLens Inc. All rights reserved.</span>
+<div class="flex gap-md text-surface-variant/50">
+<span class="font-label-sm text-label-sm">System Status: <span class="text-secondary-fixed-dim">Online</span></span>
+</div>
+</div>
+</footer>
+</body></html>
