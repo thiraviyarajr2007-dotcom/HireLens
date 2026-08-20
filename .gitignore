@@ -3,7 +3,7 @@ node_modules
 .pnpm-store
 
 # Production build outputs
-dist
+# dist
 dist-ssr
 *.local
 
