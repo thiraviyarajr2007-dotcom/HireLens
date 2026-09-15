@@ -100,15 +100,132 @@
     }
   </script>
   <style>
-    body { background-color: #F8FAFC; color: #0b1c30; font-family: 'Inter', sans-serif; }
-    .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-weight: 300; font-style: normal; display: inline-block; line-height: 1; text-transform: none; letter-spacing: normal; word-wrap: normal; white-space: nowrap; direction: ltr; }
-    .badge-found { background-color: rgba(34, 197, 94, 0.1); color: #16a34a; border: 1px solid rgba(34, 197, 94, 0.2); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; }
-    .badge-not-found { background-color: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.2); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; }
-    .badge-ambiguous { background-color: rgba(245, 158, 11, 0.1); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.2); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; }
-    .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
-    .card-level-1 { background: #ffffff; border-radius: 1rem; border: 1px solid #e2e8f0; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    body { 
+      background-color: #F8FAFC; 
+      color: #0b1c30; 
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .font-display {
+      font-family: 'Plus Jakarta Sans', 'Geist', sans-serif;
+      letter-spacing: -0.025em;
+    }
+    
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .material-symbols-outlined { 
+      font-family: 'Material Symbols Outlined'; 
+      font-weight: 300; 
+      font-style: normal; 
+      display: inline-block; 
+      line-height: 1; 
+      text-transform: none; 
+      letter-spacing: normal; 
+      word-wrap: normal; 
+      white-space: nowrap; 
+      direction: ltr; 
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Glassmorphism & Visual Tokens */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .glass-dark {
+      background: rgba(11, 28, 48, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .gradient-border {
+      position: relative;
+      background: linear-gradient(to right, #0b1c30, #0b1c30) padding-box,
+                  linear-gradient(135deg, #00d2ff, #004ac6, #9d4edd) border-box;
+      border: 1px solid transparent;
+    }
+
+    .badge-found { 
+      background-color: rgba(34, 197, 94, 0.1); 
+      color: #15803d; 
+      border: 1px solid rgba(34, 197, 94, 0.25); 
+      font-size: 11px; 
+      font-weight: 700; 
+      padding: 3px 10px; 
+      border-radius: 9999px; 
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-not-found { 
+      background-color: rgba(239, 68, 68, 0.1); 
+      color: #b91c1c; 
+      border: 1px solid rgba(239, 68, 68, 0.25); 
+      font-size: 11px; 
+      font-weight: 700; 
+      padding: 3px 10px; 
+      border-radius: 9999px; 
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-ambiguous { 
+      background-color: rgba(245, 158, 11, 0.1); 
+      color: #b45309; 
+      border: 1px solid rgba(245, 158, 11, 0.25); 
+      font-size: 11px; 
+      font-weight: 700; 
+      padding: 3px 10px; 
+      border-radius: 9999px; 
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-shadow { 
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03); 
+    }
+    
+    .card-shadow-hover {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-shadow-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 35px -12px rgba(0, 74, 198, 0.12), 0 8px 12px -4px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Subtle Shimmer Animation */
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .animate-shimmer {
+      animation: shimmer 2.5s infinite;
+    }
+
+    /* Ambient Glow */
+    .glow-cyan {
+      box-shadow: 0 0 50px -10px rgba(6, 182, 212, 0.3);
+    }
+    .glow-primary {
+      box-shadow: 0 0 50px -10px rgba(0, 74, 198, 0.3);
+    }
   </style>
-  <script type="module" crossorigin src="./assets/index-BFM4ESN8.js"></script>
+  <script type="module" crossorigin src="./assets/index-DTzd-Fc9.js"></script>
 </head>
 <body class="bg-background text-on-surface min-h-screen antialiased selection:bg-primary/20">
   <div id="root"></div>

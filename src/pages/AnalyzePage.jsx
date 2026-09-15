@@ -25,6 +25,42 @@ export default function AnalyzePage({ onStartAnalysis, onNavigate, mobileOpen, s
     setErrorMsg('');
   };
 
+  const handleUseSampleResume = () => {
+    const sampleText = `ALEX MERCER
+Email: alex.mercer@example.com | Phone: +1 555-0192 | San Francisco, CA
+LinkedIn: linkedin.com/in/alexmercer
+
+SUMMARY
+Senior Full Stack Engineer with 4+ years of hands-on experience building high-performance web applications using React, Node.js, Express, and PostgreSQL. Proven track record of optimizing client-side performance and scaling microservices.
+
+EXPERIENCE
+Lead Frontend Developer | CloudScale Systems (2022 - Present)
+- Architected customer-facing dashboard in React 18, cutting initial paint time by 38% for 50,000+ daily active users.
+- Designed reusable UI component system with TypeScript and TailwindCSS, reducing delivery cycles by 25%.
+- Implemented state management using Redux Toolkit and React Query for optimistic UI updates.
+
+Full Stack Engineer | DataFlow Tech (2020 - 2022)
+- Engineered 15+ REST endpoints in Node.js and Express with PostgreSQL database indexing, maintaining 99.9% uptime.
+- Optimized slow SQL queries with connection pooling, cutting API p95 response latency from 450ms to 120ms.
+- Built automated unit and integration tests using Jest and Supertest, achieving 88% test coverage.
+
+SKILLS
+Frontend: React, TypeScript, Redux, JavaScript, HTML5, CSS3, TailwindCSS
+Backend: Node.js, Express, Python, REST APIs, GraphQL
+Databases: PostgreSQL, SQL, Redis
+Tools: Git, Docker, Webpack, Vite, Jest
+
+EDUCATION
+B.S. in Computer Science | State University (2020)`;
+
+    const mockFile = new File([sampleText], "Alex_Mercer_Senior_FullStack.pdf", { type: "application/pdf" });
+    setSelectedFile(mockFile);
+    if (!jobDescription.trim()) {
+      setJobDescription(SAMPLE_JOB_DESCRIPTION);
+    }
+    setErrorMsg('');
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!selectedFile) {
@@ -48,11 +84,22 @@ export default function AnalyzePage({ onStartAnalysis, onNavigate, mobileOpen, s
         <TopHeader title="Analyze Candidate" onNavigate={onNavigate} onToggleMobile={() => setMobileOpen(true)} />
 
         <main className="p-6 lg:p-8 max-w-5xl mx-auto w-full space-y-8">
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-display font-bold text-[#0B1C30]">Analyze a Candidate Resume</h1>
-            <p className="text-sm text-slate-500 mt-1">
-              Upload a candidate resume (PDF / DOCX) and provide job description criteria for evidence-based verification.
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-display font-bold text-[#0B1C30]">Analyze a Candidate Resume</h1>
+              <p className="text-sm text-slate-500 mt-1">
+                Upload a candidate resume (PDF / DOCX) and verify factual claims against Job Description criteria.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleUseSampleResume}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md hover:shadow-lg transition-all hover:scale-[1.02] shrink-0"
+            >
+              <span className="material-symbols-outlined text-base">auto_awesome</span>
+              <span>1-Click Demo Profile</span>
+            </button>
           </div>
 
           {errorMsg && (
@@ -70,7 +117,17 @@ export default function AnalyzePage({ onStartAnalysis, onNavigate, mobileOpen, s
                   <span className="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">1</span>
                   <h2 className="text-lg font-display font-bold text-[#0B1C30]">Upload Candidate Resume</h2>
                 </div>
-                <span className="text-xs font-medium text-slate-400">PDF, DOCX up to 10MB</span>
+                <div className="flex items-center gap-2">
+                  <button 
+                    type="button" 
+                    onClick={handleUseSampleResume}
+                    className="text-xs font-bold text-primary hover:underline"
+                  >
+                    Load Demo CV
+                  </button>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-xs font-medium text-slate-400">PDF, DOCX up to 10MB</span>
+                </div>
               </div>
 
               {!selectedFile ? (

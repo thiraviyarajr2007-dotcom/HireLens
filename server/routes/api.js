@@ -3,6 +3,7 @@ import multer from 'multer';
 import { extractTextFromFile } from '../services/extractor.js';
 import { extractCandidateFields } from '../services/fieldExtractor.js';
 import { analyzeJobFit } from '../services/jdAnalyzer.js';
+import { evaluateCandidateWithAI } from '../services/aiService.js';
 import { matchAndUpdateCandidate } from '../services/profileConsolidator.js';
 import { loadStore, saveStore } from '../services/storage.js';
 
@@ -79,8 +80,8 @@ router.post('/analyze', upload.single('resume'), async (req, res) => {
     // 1. Structured Field Extraction
     const fields = extractCandidateFields(rawText, fileName);
 
-    // 2. Job Fit Analysis
-    const fit = analyzeJobFit(fields, jobDescription, fileName);
+    // 2. Job Fit Analysis (AI Evaluator with graceful fallback)
+    const fit = await evaluateCandidateWithAI(rawText, jobDescription, fields);
 
     // Assemble Candidate Model
     const candidateData = {
@@ -95,6 +96,11 @@ router.post('/analyze', upload.single('resume'), async (req, res) => {
       fitScore: fit.fitScore,
       fitStatus: fit.fitStatus,
       recommendation: fit.recommendation,
+      candidateSummary: fit.candidateSummary,
+      keyStrengths: fit.keyStrengths,
+      criticalGaps: fit.criticalGaps,
+      experienceLevelMatch: fit.experienceLevelMatch,
+      targetedInterviewQuestions: fit.targetedInterviewQuestions,
       skillsMatch: fit.skillsMatch,
       experienceMatch: fit.experienceMatch,
       educationMatch: fit.educationMatch,
@@ -175,7 +181,7 @@ router.post('/analyze/bulk', upload.array('resumes'), async (req, res) => {
       try {
         const rawText = await extractTextFromFile(file.buffer, file.originalname, file.mimetype);
         const fields = extractCandidateFields(rawText, file.originalname);
-        const fit = analyzeJobFit(fields, jobDescription, file.originalname);
+        const fit = await evaluateCandidateWithAI(rawText, jobDescription, fields);
 
         const candidateData = {
           id: 'c_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
@@ -189,6 +195,11 @@ router.post('/analyze/bulk', upload.array('resumes'), async (req, res) => {
           fitScore: fit.fitScore,
           fitStatus: fit.fitStatus,
           recommendation: fit.recommendation,
+          candidateSummary: fit.candidateSummary,
+          keyStrengths: fit.keyStrengths,
+          criticalGaps: fit.criticalGaps,
+          experienceLevelMatch: fit.experienceLevelMatch,
+          targetedInterviewQuestions: fit.targetedInterviewQuestions,
           skillsMatch: fit.skillsMatch,
           experienceMatch: fit.experienceMatch,
           educationMatch: fit.educationMatch,

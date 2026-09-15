@@ -239,6 +239,29 @@ export function analyzeResume(resumeFile, resumeText, jobDescription) {
     educationMatch,
     mainStrength: "Strong Technical Stack Alignment",
     mainGap: "Cloud Certification evidence ambiguous",
+    targetedInterviewQuestions: {
+      technical: [
+        `In your experience with React and Node.js, what was the most challenging performance or latency bottleneck you resolved in production?`,
+        `How do you structure database query indexing, connection pooling, and schema migrations under peak concurrency?`,
+        `Walk us through your automated testing and CI/CD strategy for zero-downtime microservice deployments.`
+      ],
+      behavioral: [
+        `Describe a scenario where a critical bug or performance regression slipped into production. How did you coordinate the hotfix and conduct the post-mortem?`,
+        `Tell us about a technical disagreement you had with an architect or peer regarding code architecture. How did you achieve consensus?`
+      ]
+    },
+    keyStrengths: [
+      `Demonstrated production React and Node.js implementation matching mandatory requirements.`,
+      `Solid foundations in relational database schema design and RESTful API engineering.`
+    ],
+    criticalGaps: [
+      `Cloud container deployment experience (AWS ECS/Kubernetes) unverified in uploaded document.`
+    ],
+    experienceLevelMatch: {
+      required: "3+ years",
+      evaluated: "~3.5 years",
+      assessment: "Adequate"
+    },
     extractedProfile,
     matchedRequirements,
     missingRequirements,
