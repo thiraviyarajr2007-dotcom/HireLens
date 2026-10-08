@@ -1,0 +1,25 @@
+[SYNTHETIC TEST FIXTURE — DO NOT USE AS REAL RECRUITING DATA]
+Candidate: Chen Wei
+Email: chen.wei.synthetic@example.org
+Phone: (206) 555-0176
+Location: Seattle, WA
+LinkedIn: linkedin.com/in/chen-wei-synth
+
+SUMMARY
+Full stack developer with 3 years of experience in modern JavaScript, React, and server-side TypeScript.
+
+TECHNICAL SKILLS
+React, TypeScript, Next.js, Node.js, GraphQL, PostgreSQL, Docker, Git
+
+EDUCATION
+B.S. in Computer Science
+University of Washington (2021)
+
+EXPERIENCE
+Software Engineer — NexaCloud (2022 - Present)
+- Built enterprise frontend applications with React and Next.js used by over 50,000 active users.
+- Integrated GraphQL endpoints with PostgreSQL relational backends, improving query response times by 18%.
+- Implemented responsive, accessible design patterns and established end-to-end testing with Cypress.
+
+Junior Web Developer — PineApp (2021 - 2022)
+- Built web features in React and TypeScript with component library standards.

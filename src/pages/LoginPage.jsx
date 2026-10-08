@@ -77,10 +77,13 @@ export default function LoginPage({ onNavigate, initialMode = 'login', onAuthSuc
 
   const handleDemoLogin = () => {
     const demoUser = {
-      displayName: 'Demo Recruiter',
-      email: 'recruiter@hirelens-ai.com',
-      photoURL: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+      uid: 'demo_user_recruiter_001',
+      displayName: 'Demo Recruiter (Sandbox)',
+      email: 'recruiter@demo.hirelens.ai',
+      isDemo: true,
+      getIdToken: async () => 'demo-token-recruiter'
     };
+    localStorage.setItem('hirelens_demo_user', 'true');
     if (onAuthSuccess) onAuthSuccess(demoUser);
     onNavigate('/dashboard');
   };
@@ -265,27 +268,30 @@ export default function LoginPage({ onNavigate, initialMode = 'login', onAuthSuc
           </button>
         </form>
 
-        {/* Demo Fast Login Button */}
-        <div className="pt-2 border-t border-slate-100 text-center space-y-2">
-          <button 
-            type="button"
-            onClick={handleDemoLogin}
-            className="w-full py-2.5 rounded-xl bg-blue-50 text-primary font-bold text-xs hover:bg-blue-100 transition-colors flex items-center justify-center gap-1.5"
-          >
-            <span className="material-symbols-outlined text-base">bolt</span>
-            <span>Instant Demo Recruiter Login</span>
-          </button>
-          
-          {mode === 'forgot' && (
+        {/* Demo Fast Login Button (Gated behind VITE_DEMO_MODE, B12 fix) */}
+        {(import.meta.env.VITE_DEMO_MODE === 'true' || import.meta.env.DEV) && (
+          <div className="pt-2 border-t border-slate-100 text-center space-y-2">
             <button 
               type="button"
-              onClick={() => setMode('login')}
-              className="text-xs text-slate-500 hover:text-primary font-semibold block mx-auto"
+              onClick={handleDemoLogin}
+              className="w-full py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 font-bold text-xs hover:bg-amber-100 transition-colors flex items-center justify-center gap-1.5"
             >
-              ← Back to Sign In
+              <span className="material-symbols-outlined text-base text-amber-600">science</span>
+              <span>Launch Sandbox Demo Recruiter (Demo Mode)</span>
             </button>
-          )}
-        </div>
+            <p className="text-[10px] text-slate-400">Sandbox session for evaluation with synthetic test fixtures.</p>
+          </div>
+        )}
+
+        {mode === 'forgot' && (
+          <button 
+            type="button"
+            onClick={() => setMode('login')}
+            className="text-xs text-slate-500 hover:text-primary font-semibold block mx-auto pt-2"
+          >
+            ← Back to Sign In
+          </button>
+        )}
       </div>
     </div>
   );

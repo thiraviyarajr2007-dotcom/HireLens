@@ -11,10 +11,6 @@ export default function LandingPage({ onNavigate, user, onSignOut }) {
 
   const mainVideoRef = useRef(null);
 
-  // Fallback video URL array for GitHub Pages, local dev, or direct root hosting
-  const baseUrl = import.meta.env.BASE_URL || './';
-  const publicVideoFallback = `${baseUrl}HireLens_product_demo_teaser_16x9.mp4`.replace(/\/\//g, '/');
-
   const handleToggleMainPlay = () => {
     if (mainVideoRef.current) {
       if (mainVideoRef.current.paused) {
@@ -87,9 +83,6 @@ export default function LandingPage({ onNavigate, user, onSignOut }) {
                 className="w-full h-full object-cover"
               >
                 <source src={demoVideo} type="video/mp4" />
-                <source src={publicVideoFallback} type="video/mp4" />
-                <source src="./HireLens_product_demo_teaser_16x9.mp4" type="video/mp4" />
-                <source src="HireLens_product_demo_teaser_16x9.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
 
@@ -299,12 +292,7 @@ export default function LandingPage({ onNavigate, user, onSignOut }) {
               onPlay={() => setIsPlayingMain(true)}
               onPause={() => setIsPlayingMain(false)}
             >
-              {/* Prioritized sources: Bundled asset first, then public base URL, then relative */}
               <source src={demoVideo} type="video/mp4" />
-              <source src={publicVideoFallback} type="video/mp4" />
-              <source src="./HireLens_product_demo_teaser_16x9.mp4" type="video/mp4" />
-              <source src="HireLens_product_demo_teaser_16x9.mp4" type="video/mp4" />
-              <source src="/HireLens_product_demo_teaser_16x9.mp4" type="video/mp4" />
               Your browser does not support HTML5 video streaming.
             </video>
 

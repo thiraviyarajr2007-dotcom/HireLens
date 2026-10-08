@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import LandingPage from './pages/LandingPage';
-import DashboardPage from './pages/DashboardPage';
-import AnalyzePage from './pages/AnalyzePage';
-import ProcessingPage from './pages/ProcessingPage';
-import CandidateAnalysisPage from './pages/CandidateAnalysisPage';
-import EvidenceExplorerPage from './pages/EvidenceExplorerPage';
-import RankingsPage from './pages/RankingsPage';
-import CandidatesPage from './pages/CandidatesPage';
-import ComparisonPage from './pages/ComparisonPage';
-import BulkAnalyzePage from './pages/BulkAnalyzePage';
-import HistoryPage from './pages/HistoryPage';
-import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
 
+// Lazy-load dashboard and analytical pages (Phase 5 bundle optimization)
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const AnalyzePage = lazy(() => import('./pages/AnalyzePage'));
+const ProcessingPage = lazy(() => import('./pages/ProcessingPage'));
+const CandidateAnalysisPage = lazy(() => import('./pages/CandidateAnalysisPage'));
+const EvidenceExplorerPage = lazy(() => import('./pages/EvidenceExplorerPage'));
+const RankingsPage = lazy(() => import('./pages/RankingsPage'));
+const CandidatesPage = lazy(() => import('./pages/CandidatesPage'));
+const ComparisonPage = lazy(() => import('./pages/ComparisonPage'));
+const BulkAnalyzePage = lazy(() => import('./pages/BulkAnalyzePage'));
+const HistoryPage = lazy(() => import('./pages/HistoryPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const AiAuditPage = lazy(() => import('./pages/AiAuditPage'));
+
 import { INITIAL_CANDIDATES, MOCK_HISTORY } from './data/mockData';
-import { analyzeResume, matchCandidateProfile } from './services/analysisEngine';
 import { 
   analyzeSingleResumeApi, 
   analyzeBulkResumesApi, 
@@ -31,6 +33,8 @@ export default function App() {
   const [pendingAnalysis, setPendingAnalysis] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState(null);
+
+  const [analysisError, setAnalysisError] = useState(null);
 
   // Router state
   const [currentPath, setCurrentPath] = useState(() => {
@@ -49,13 +53,24 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Firebase Auth listener
+  // Firebase Auth listener + Demo user session recovery
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
       } else {
-        setUser(null);
+        const isDemo = localStorage.getItem('hirelens_demo_user');
+        if (isDemo) {
+          setUser({
+            uid: 'demo_user_recruiter_001',
+            displayName: 'Demo Recruiter (Sandbox)',
+            email: 'recruiter@demo.hirelens.ai',
+            isDemo: true,
+            getIdToken: async () => 'demo-token-recruiter'
+          });
+        } else {
+          setUser(null);
+        }
       }
     });
     return () => unsubscribe();
@@ -63,6 +78,7 @@ export default function App() {
 
   const handleSignOut = async () => {
     try {
+      localStorage.removeItem('hirelens_demo_user');
       await signOut(auth);
     } catch (err) {
       console.error('Sign Out Error:', err);
@@ -80,7 +96,7 @@ export default function App() {
           setCandidates(fetchedCandidates);
         }
       } catch (err) {
-        // Backend fallback
+        // Backend not yet populated
       }
 
       try {
@@ -89,11 +105,13 @@ export default function App() {
           setHistoryList(fetchedHistory);
         }
       } catch (err) {
-        // Backend fallback
+        // Backend not yet populated
       }
     }
-    loadBackendData();
-  }, []);
+    if (user) {
+      loadBackendData();
+    }
+  }, [user]);
 
   const navigate = (path) => {
     window.location.hash = path;
@@ -101,19 +119,23 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
-  // Start single resume analysis
+  // Start single resume analysis with runId for real SSE tracking (B16 fix)
   const handleStartAnalysis = (file, jobDescription) => {
-    setPendingAnalysis({ file, jobDescription, mode: 'single' });
+    setAnalysisError(null);
+    const runId = 'run_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+    setPendingAnalysis({ file, jobDescription, mode: 'single', runId });
     navigate('/analyze/processing');
   };
 
   // Start bulk resume analysis
   const handleStartBulkAnalysis = (files, jobDescription) => {
-    setPendingAnalysis({ files, jobDescription, mode: 'bulk' });
+    setAnalysisError(null);
+    const runId = 'run_bulk_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+    setPendingAnalysis({ files, jobDescription, mode: 'bulk', runId });
     navigate('/analyze/processing');
   };
 
-  // Complete analysis pipeline
+  // Complete analysis pipeline (strictly calls real backend with runId, no fake client fallbacks)
   const handleCompleteAnalysis = async () => {
     if (!pendingAnalysis) {
       navigate('/dashboard');
@@ -130,46 +152,19 @@ export default function App() {
         setHistoryList(updatedHist);
         setPendingAnalysis(null);
         navigate('/rankings');
-        return;
       } catch (err) {
-        console.warn('Backend API unavailable, executing client engine fallback:', err.message);
+        console.error('Bulk analysis service error:', err);
+        setAnalysisError(err.message || 'Unable to connect to analysis service.');
       }
-
-      // Fallback
-      let updatedCandidates = [...candidates];
-      const newHistoryItems = [];
-
-      (pendingAnalysis.files || []).forEach((file) => {
-        const rawExtraction = analyzeResume(file, `Resume text for ${file.name}`, pendingAnalysis.jobDescription);
-        const { candidate, isExisting } = matchCandidateProfile(rawExtraction, updatedCandidates);
-
-        if (isExisting) {
-          updatedCandidates = updatedCandidates.map(c => c.id === candidate.id ? candidate : c);
-        } else {
-          updatedCandidates = [candidate, ...updatedCandidates];
-        }
-
-        newHistoryItems.push({
-          id: "hist-" + Date.now() + "-" + Math.random().toString(36).substr(2, 4),
-          candidateId: candidate.id,
-          candidateName: candidate.name,
-          role: candidate.role,
-          fitScore: candidate.fitScore,
-          date: new Date().toISOString().split('T')[0],
-          status: isExisting ? "Profile Updated" : "Completed"
-        });
-      });
-
-      setCandidates(updatedCandidates);
-      setHistoryList((prev) => [...newHistoryItems, ...prev]);
-      setPendingAnalysis(null);
-      navigate('/rankings');
     } else {
-      let resultCandidate = null;
-
       try {
-        const apiResult = await analyzeSingleResumeApi(pendingAnalysis.file, pendingAnalysis.jobDescription);
-        resultCandidate = apiResult.candidate;
+        const apiResult = await analyzeSingleResumeApi(
+          pendingAnalysis.file, 
+          pendingAnalysis.jobDescription, 
+          null, 
+          pendingAnalysis.runId
+        );
+        const resultCandidate = apiResult.candidate;
 
         const updatedCand = await fetchCandidatesApi();
         setCandidates(updatedCand);
@@ -179,41 +174,10 @@ export default function App() {
 
         setPendingAnalysis(null);
         navigate(`/candidate/${resultCandidate.id}`);
-        return;
       } catch (err) {
-        console.warn('Backend API unavailable, executing client engine fallback:', err.message);
+        console.error('Analysis service error:', err);
+        setAnalysisError(err.message || 'Unable to connect to analysis service.');
       }
-
-      // Fallback
-      const rawExtraction = analyzeResume(
-        pendingAnalysis.file,
-        `Resume content extracted from ${pendingAnalysis.file?.name || 'Resume.pdf'}`,
-        pendingAnalysis.jobDescription
-      );
-
-      const { candidate, isExisting } = matchCandidateProfile(rawExtraction, candidates);
-
-      if (isExisting) {
-        setCandidates((prev) => prev.map(c => c.id === candidate.id ? candidate : c));
-      } else {
-        setCandidates((prev) => [candidate, ...prev]);
-      }
-
-      setHistoryList((prev) => [
-        {
-          id: "hist-" + Date.now(),
-          candidateId: candidate.id,
-          candidateName: candidate.name,
-          role: candidate.role,
-          fitScore: candidate.fitScore,
-          date: new Date().toISOString().split('T')[0],
-          status: isExisting ? "Profile Updated" : "Completed"
-        },
-        ...prev
-      ]);
-
-      setPendingAnalysis(null);
-      navigate(`/candidate/${candidate.id}`);
     }
   };
 
@@ -227,8 +191,14 @@ export default function App() {
     if (raw.startsWith('/candidate/')) {
       const parts = raw.split('/');
       const candidateId = parts[2];
-      const isEvidence = parts[3] === 'evidence';
-      return { route: isEvidence ? '/candidate/evidence' : '/candidate', candidateId, fieldParam };
+      const sub = parts[3];
+      if (sub === 'evidence') {
+        return { route: '/candidate/evidence', candidateId, fieldParam };
+      }
+      if (sub === 'audit') {
+        return { route: '/candidate/audit', candidateId, fieldParam };
+      }
+      return { route: '/candidate', candidateId, fieldParam };
     }
 
     return { route: raw, candidateId: null, fieldParam };
@@ -248,8 +218,13 @@ export default function App() {
     onSignOut: handleSignOut
   };
 
-  // Render view by route
+  // Render view by route with Route Guard (B12 fix)
   const renderView = () => {
+    const publicRoutes = ['/', '/login', '/signup', '/forgot-password'];
+    if (!publicRoutes.includes(route) && !user) {
+      return <LoginPage onNavigate={navigate} initialMode="login" onAuthSuccess={(u) => setUser(u)} />;
+    }
+
     switch (route) {
       case '/':
         return <LandingPage onNavigate={navigate} user={user} onSignOut={handleSignOut} />;
@@ -270,13 +245,24 @@ export default function App() {
         return <AnalyzePage onStartAnalysis={handleStartAnalysis} {...commonProps} />;
 
       case '/analyze/processing':
-        return <ProcessingPage pendingAnalysis={pendingAnalysis} onCompleteAnalysis={handleCompleteAnalysis} {...commonProps} />;
+        return (
+          <ProcessingPage 
+            pendingAnalysis={pendingAnalysis} 
+            onCompleteAnalysis={handleCompleteAnalysis} 
+            analysisError={analysisError}
+            onClearError={() => setAnalysisError(null)}
+            {...commonProps} 
+          />
+        );
 
       case '/candidate':
         return <CandidateAnalysisPage candidate={selectedCandidate} {...commonProps} />;
 
       case '/candidate/evidence':
         return <EvidenceExplorerPage candidate={selectedCandidate} initialFieldId={fieldParam} {...commonProps} />;
+
+      case '/candidate/audit':
+        return <AiAuditPage candidate={selectedCandidate} {...commonProps} />;
 
       case '/candidates':
         return <CandidatesPage candidates={candidates} {...commonProps} />;
@@ -303,7 +289,16 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      {renderView()}
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC]">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-semibold text-slate-500">Loading HireLens...</span>
+          </div>
+        </div>
+      }>
+        {renderView()}
+      </Suspense>
     </div>
   );
 }

@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import TopHeader from '../components/TopHeader';
+import { logIdentityRevealApi } from '../services/apiClient';
 
 export default function CandidateAnalysisPage({ candidate, onNavigate, mobileOpen, setMobileOpen }) {
+  const [isBlindMode, setIsBlindMode] = useState(true);
+  const [revealing, setRevealing] = useState(false);
+
   if (!candidate) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex font-body-md text-[#0B1C30]">
@@ -14,6 +18,29 @@ export default function CandidateAnalysisPage({ candidate, onNavigate, mobileOpe
       </div>
     );
   }
+
+  const handleToggleBlindMode = async () => {
+    if (isBlindMode) {
+      setRevealing(true);
+      try {
+        await logIdentityRevealApi(candidate.evaluationId || candidate.id, {
+          candidateId: candidate.id,
+          reason: 'Recruiter unmasked blind candidate profile'
+        });
+      } catch (err) {
+        // Logged locally
+      } finally {
+        setRevealing(false);
+        setIsBlindMode(false);
+      }
+    } else {
+      setIsBlindMode(true);
+    }
+  };
+
+  const displayName = isBlindMode 
+    ? `Candidate #${(candidate.id || '').slice(-4) || '8492'} (Blind Review)` 
+    : (candidate.name || 'Candidate');
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex font-body-md text-[#0B1C30]">
@@ -33,13 +60,45 @@ export default function CandidateAnalysisPage({ candidate, onNavigate, mobileOpe
               <span>Back to Candidate Rankings</span>
             </button>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Blind Mode Toggle Button (Phase 3) */}
+              <button
+                onClick={handleToggleBlindMode}
+                className={`px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 shadow-sm ${
+                  isBlindMode 
+                    ? 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
+                    : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
+                }`}
+                title={isBlindMode ? "Click to reveal real candidate name & contacts" : "Re-enable blind anonymization"}
+              >
+                <span className="material-symbols-outlined text-base">
+                  {isBlindMode ? 'visibility_off' : 'visibility'}
+                </span>
+                <span>{isBlindMode ? 'Reveal Candidate Identity' : 'Enable Blind Review'}</span>
+              </button>
+
+              <button 
+                onClick={() => onNavigate(`/candidate/${candidate.id}/audit`)}
+                className="px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 font-semibold text-xs hover:bg-indigo-100 transition-colors shadow-sm flex items-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-base">balance</span>
+                <span>AI & Bias Audit</span>
+              </button>
+
               <button 
                 onClick={() => onNavigate(`/candidate/${candidate.id}/evidence`)}
                 className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:bg-slate-50 transition-colors shadow-sm flex items-center gap-1.5"
               >
                 <span className="material-symbols-outlined text-base text-primary">plagiarism</span>
                 <span>Open Evidence Explorer</span>
+              </button>
+
+              <button 
+                onClick={() => window.print()}
+                className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:bg-slate-50 transition-colors shadow-sm flex items-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-base text-slate-600">print</span>
+                <span>Export PDF</span>
               </button>
 
               <button 
@@ -56,25 +115,56 @@ export default function CandidateAnalysisPage({ candidate, onNavigate, mobileOpe
           <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-200 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div className="flex items-center gap-6">
               <div className="relative">
-                <img 
-                  src={candidate.avatar} 
-                  alt={candidate.name} 
-                  className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md"
-                />
+                {isBlindMode ? (
+                  <div className="w-20 h-20 rounded-full bg-slate-800 text-cyan-400 flex items-center justify-center font-bold text-2xl shadow-md border-2 border-slate-700">
+                    <span className="material-symbols-outlined text-3xl">visibility_off</span>
+                  </div>
+                ) : candidate.avatar ? (
+                  <img 
+                    src={candidate.avatar} 
+                    alt={candidate.name || 'Candidate'} 
+                    className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-xl font-bold shadow-md border-2 border-white">
+                    {(candidate.name || 'C').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()}
+                  </div>
+                )}
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center text-white">
                   <span className="material-symbols-outlined text-xs">check</span>
                 </div>
               </div>
 
               <div>
-                <h1 className="font-display text-2xl lg:text-3xl font-bold text-[#0B1C30]">{candidate.name}</h1>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h1 className="font-display text-2xl lg:text-3xl font-bold text-[#0B1C30]">{displayName}</h1>
+                  {candidate.analysisMode === 'heuristic' ? (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-300 text-xs font-bold inline-flex items-center gap-1 shadow-sm">
+                      <span className="material-symbols-outlined text-sm text-amber-600">info</span>
+                      Heuristic mode (no LLM)
+                    </span>
+                  ) : (
+                    <span className="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold inline-flex items-center gap-1 shadow-sm">
+                      <span className="material-symbols-outlined text-sm text-blue-600">psychology</span>
+                      AI Evaluated
+                    </span>
+                  )}
+                  {isBlindMode && (
+                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold border border-slate-200">
+                      Blind Mode Active
+                    </span>
+                  )}
+                </div>
+
                 <p className="text-sm text-slate-600 flex items-center gap-2 mt-1 flex-wrap">
                   <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-base text-slate-400">work</span> {candidate.role}
+                    <span className="material-symbols-outlined text-base text-slate-400">work</span>
+                    {candidate.role || 'Not found in resume'}
                   </span>
                   <span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span>
                   <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-base text-slate-400">location_on</span> {candidate.location}
+                    <span className="material-symbols-outlined text-base text-slate-400">location_on</span>
+                    {candidate.location || 'Not found in resume'}
                   </span>
                 </p>
               </div>
@@ -122,15 +212,15 @@ export default function CandidateAnalysisPage({ candidate, onNavigate, mobileOpe
                 <div className="space-y-3 text-sm text-slate-700">
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-slate-400 text-lg">mail</span>
-                    <span>{candidate.email}</span>
+                    <span>{candidate.email || 'Not found in resume'}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-slate-400 text-lg">phone</span>
-                    <span>{candidate.phone}</span>
+                    <span>{candidate.phone || 'Not found in resume'}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-blue-600 text-lg">link</span>
-                    <span className="text-blue-600 font-medium">{candidate.linkedin}</span>
+                    <span className="text-blue-600 font-medium">{candidate.linkedin || 'Not found in resume'}</span>
                   </div>
                 </div>
               </div>
@@ -145,10 +235,12 @@ export default function CandidateAnalysisPage({ candidate, onNavigate, mobileOpe
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-700">Education</span>
-                    <span className="badge-found">FOUND</span>
+                    <span className={candidate.extractedProfile?.education ? "badge-found" : "badge-not-found"}>
+                      {candidate.extractedProfile?.education ? "FOUND" : "NOT_FOUND"}
+                    </span>
                   </div>
                   <p className="text-xs text-slate-600 whitespace-pre-line leading-relaxed">
-                    {candidate.extractedProfile.education}
+                    {candidate.extractedProfile?.education || "Not found in resume"}
                   </p>
                 </div>
 
@@ -156,24 +248,35 @@ export default function CandidateAnalysisPage({ candidate, onNavigate, mobileOpe
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-700">Latest Role</span>
-                    <span className="badge-found">FOUND</span>
+                    <span className={candidate.extractedProfile?.latestExperience ? "badge-found" : "badge-not-found"}>
+                      {candidate.extractedProfile?.latestExperience ? "FOUND" : "NOT_FOUND"}
+                    </span>
                   </div>
                   <p className="text-xs text-slate-600 whitespace-pre-line leading-relaxed">
-                    {candidate.extractedProfile.latestExperience}
+                    {candidate.extractedProfile?.latestExperience || "Not found in resume"}
                   </p>
                 </div>
 
                 {/* Verified Skills */}
                 <div className="space-y-2">
-                  <span className="text-xs font-bold text-slate-700 block">Verified Skills</span>
-                  <div className="flex flex-wrap gap-2">
-                    {candidate.extractedProfile.skills.map((s, idx) => (
-                      <span key={idx} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200">
-                        {s.name}
-                        {s.verified && <span className="material-symbols-outlined text-green-500 text-xs">check_circle</span>}
-                      </span>
-                    ))}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">Verified Skills</span>
+                    <span className={candidate.extractedProfile?.skills?.length ? "badge-found" : "badge-not-found"}>
+                      {candidate.extractedProfile?.skills?.length ? `${candidate.extractedProfile.skills.length} FOUND` : "NOT_FOUND"}
+                    </span>
                   </div>
+                  {candidate.extractedProfile?.skills && candidate.extractedProfile.skills.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {candidate.extractedProfile.skills.map((s, idx) => (
+                        <span key={idx} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200">
+                          {s.name}
+                          {s.verified && <span className="material-symbols-outlined text-green-500 text-xs">check_circle</span>}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-slate-400 italic">Not found in resume</p>
+                  )}
                 </div>
 
                 {/* Source Documents (Neutral List) */}

@@ -1,0 +1,59 @@
+{
+  "skills": {
+    "react": {
+      "transferableTo": ["vue", "angular", "svelte", "nextjs"],
+      "domain": "Frontend Frameworks",
+      "similarity": 0.82
+    },
+    "vue": {
+      "transferableTo": ["react", "angular", "svelte"],
+      "domain": "Frontend Frameworks",
+      "similarity": 0.80
+    },
+    "angular": {
+      "transferableTo": ["react", "vue", "typescript"],
+      "domain": "Frontend Frameworks",
+      "similarity": 0.78
+    },
+    "nodejs": {
+      "transferableTo": ["express", "fastify", "nest.js", "deno", "bun"],
+      "domain": "Backend Runtimes",
+      "similarity": 0.88
+    },
+    "python": {
+      "transferableTo": ["django", "fastapi", "flask", "ruby"],
+      "domain": "General / Backend",
+      "similarity": 0.75
+    },
+    "postgresql": {
+      "transferableTo": ["mysql", "mariadb", "sqlite", "cockroachdb", "sql"],
+      "domain": "Relational Databases",
+      "similarity": 0.85
+    },
+    "mongodb": {
+      "transferableTo": ["dynamodb", "couchbase", "documentdb", "nosql"],
+      "domain": "Document NoSQL",
+      "similarity": 0.80
+    },
+    "aws": {
+      "transferableTo": ["gcp", "azure", "cloud", "digitalocean"],
+      "domain": "Cloud Infrastructure",
+      "similarity": 0.84
+    },
+    "docker": {
+      "transferableTo": ["podman", "kubernetes", "containerd"],
+      "domain": "Containerization",
+      "similarity": 0.86
+    },
+    "kubernetes": {
+      "transferableTo": ["docker", "helm", "openshift"],
+      "domain": "Container Orchestration",
+      "similarity": 0.82
+    },
+    "typescript": {
+      "transferableTo": ["javascript"],
+      "domain": "Frontend / Full-stack",
+      "similarity": 0.95
+    }
+  }
+}

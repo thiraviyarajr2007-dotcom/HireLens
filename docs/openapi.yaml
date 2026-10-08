@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: HireLens AI REST API
+  description: Evidence-based candidate evaluation, verbatim quote grounding, and AI bias audit API.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+    description: Local development API server
+paths:
+  /health:
+    get:
+      summary: API Health Check
+      responses:
+        '200':
+          description: Service status
+          content:
+            application/json:
+              example:
+                status: "online"
+                service: "HireLens AI REST API"
+                timestamp: "2026-10-08T12:00:00.000Z"
+
+  /analyze:
+    post:
+      summary: Execute Grounded Resume Evaluation Pipeline
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                resume:
+                  type: string
+                  format: binary
+                jobDescription:
+                  type: string
+                jobId:
+                  type: string
+      responses:
+        '200':
+          description: Successful candidate evaluation
+        '401':
+          description: Unauthorized
+        '429':
+          description: Rate limit exceeded
+
+  /analyze/bulk:
+    post:
+      summary: Bulk Resume Evaluation (3-parallel Concurrency Limited)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                resumes:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                jobDescription:
+                  type: string
+      responses:
+        '200':
+          description: Bulk processing summary and ranked candidates
+
+  /analyze/{runId}/events:
+    get:
+      summary: Server-Sent Events (SSE) Stream for Pipeline Stages
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Real-time event stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /candidates:
+    get:
+      summary: List Evaluated Candidates for Authenticated Recruiter
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of candidates ordered by fit score
+
+  /candidates/{id}:
+    get:
+      summary: Retrieve Candidate Evaluation Details
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Candidate record with grounded evidence spans
+        '404':
+          description: Candidate not found
+
+  /audit/counterfactual/{evaluationId}:
+    post:
+      summary: Trigger Counterfactual Demographic Bias Audit
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: evaluationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                threshold:
+                  type: number
+                  default: 5
+      responses:
+        '200':
+          description: Counterfactual score deltas and disparity assessment
+
+  /audit/override/{evaluationId}:
+    post:
+      summary: Submit Recruiter Manual Override Decision
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: evaluationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requirementId, newStatus, reason]
+              properties:
+                requirementId:
+                  type: string
+                newStatus:
+                  type: string
+                  enum: [MATCHED, PARTIAL, NOT_FOUND]
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Override committed to immutable audit ledger
+
+  /audit/aggregate:
+    get:
+      summary: Aggregate Fairness & Divergence Metrics
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Platform-wide demographic score deltas and rejected hallucinations
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

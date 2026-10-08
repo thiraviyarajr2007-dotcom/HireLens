@@ -1,0 +1,25 @@
+[SYNTHETIC TEST FIXTURE — DO NOT USE AS REAL RECRUITING DATA]
+Candidate: Bob Martinez
+Email: bob.martinez.synthetic@example.org
+Phone: (512) 555-0188
+Location: Austin, TX
+LinkedIn: linkedin.com/in/bob-martinez-synth
+
+SUMMARY
+Backend engineer with 4 years of experience specializing in Node.js, Python, and cloud infrastructure.
+
+TECHNICAL SKILLS
+Node.js, Python, PostgreSQL, AWS, Docker, Linux, CI/CD, REST API
+
+EDUCATION
+B.S. in Electrical and Computer Engineering
+University of Texas at Austin (2020)
+
+EXPERIENCE
+Software Engineer — DataFlow Systems (2021 - Present)
+- Developed asynchronous microservices in Node.js and Python processing over 15 million daily events.
+- Optimized slow SQL queries on PostgreSQL, reducing average database CPU utilization by 22%.
+- Built automated CI/CD deployment pipelines using Docker and GitHub Actions on AWS.
+
+Associate Engineer — SolTech (2020 - 2021)
+- Maintained backend RESTful services and wrote comprehensive unit and integration tests.

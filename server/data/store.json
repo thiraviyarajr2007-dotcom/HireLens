@@ -1,4 +1,878 @@
 {
   "candidates": [],
-  "history": []
+  "jobs": [
+    {
+      "id": "job_1791463775713",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:49:35.713Z"
+    },
+    {
+      "id": "job_1791463753748",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:49:13.748Z"
+    },
+    {
+      "id": "job_1791463736338",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:48:56.338Z"
+    },
+    {
+      "id": "job_1791463716140",
+      "title": "Software Engineer",
+      "rawText": "Seeking React and TypeScript engineer with 3+ years experience.",
+      "requiredYears": 3,
+      "educationReq": "Relevant Degree or equivalent experience",
+      "mandatorySkills": [
+        "React",
+        "TypeScript"
+      ],
+      "preferredSkills": [],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        }
+      ],
+      "createdAt": "2026-10-08T12:48:36.140Z"
+    },
+    {
+      "id": "job_1791463382852",
+      "title": "Software Engineer",
+      "rawText": "Seeking React and TypeScript engineer with 3+ years experience.",
+      "requiredYears": 3,
+      "educationReq": "Relevant Degree or equivalent experience",
+      "mandatorySkills": [
+        "React",
+        "TypeScript"
+      ],
+      "preferredSkills": [],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        }
+      ],
+      "createdAt": "2026-10-08T12:43:02.852Z"
+    },
+    {
+      "id": "job_1791463313220",
+      "title": "Software Engineer",
+      "rawText": "Seeking React and TypeScript engineer with 3+ years experience.",
+      "requiredYears": 3,
+      "educationReq": "Relevant Degree or equivalent experience",
+      "mandatorySkills": [
+        "React",
+        "TypeScript"
+      ],
+      "preferredSkills": [],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        }
+      ],
+      "createdAt": "2026-10-08T12:41:53.220Z"
+    },
+    {
+      "id": "job_1791462280261",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:24:40.261Z"
+    },
+    {
+      "id": "job_1791462258625",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:24:18.625Z"
+    },
+    {
+      "id": "job_1791462237345",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:23:57.346Z"
+    },
+    {
+      "id": "job_1791461926343",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:18:46.344Z"
+    },
+    {
+      "id": "job_1791461909650",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:18:29.650Z"
+    },
+    {
+      "id": "job_1791461892316",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:18:12.316Z"
+    },
+    {
+      "id": "job_1791461873636",
+      "title": "React Engineer",
+      "rawText": "React Engineer",
+      "requiredYears": 2,
+      "educationReq": "Relevant Degree or equivalent experience",
+      "mandatorySkills": [
+        "React"
+      ],
+      "preferredSkills": [],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        }
+      ],
+      "createdAt": "2026-10-08T12:17:53.636Z"
+    },
+    {
+      "id": "job_1791461784449",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:16:24.450Z"
+    },
+    {
+      "id": "job_1791461767605",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:16:07.605Z"
+    },
+    {
+      "id": "job_1791461749210",
+      "title": "Senior Software Engineer (Full Stack)",
+      "rawText": "Job Title: Senior Software Engineer (Full Stack)\nRequirements:\n1. 3+ years experience with React and TypeScript.\n2. Production experience with Node.js and PostgreSQL.\n3. Proven experience with Docker and AWS cloud services.\n4. Bachelor's Degree in Computer Science or related discipline.",
+      "requiredYears": 3,
+      "educationReq": "Bachelor's Degree in Computer Science or related discipline",
+      "mandatorySkills": [
+        "React",
+        "Node.js",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "preferredSkills": [
+        "AWS",
+        "Docker"
+      ],
+      "weights": {
+        "skills": 0.45,
+        "experience": 0.35,
+        "impact": 0.2,
+        "education": 0
+      },
+      "requirements": [
+        {
+          "id": "req-m-1",
+          "title": "React Proficiency",
+          "skill": "React",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-2",
+          "title": "Node.js Proficiency",
+          "skill": "Node.js",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-3",
+          "title": "TypeScript Proficiency",
+          "skill": "TypeScript",
+          "isMandatory": true
+        },
+        {
+          "id": "req-m-4",
+          "title": "PostgreSQL Proficiency",
+          "skill": "PostgreSQL",
+          "isMandatory": true
+        },
+        {
+          "id": "req-p-1",
+          "title": "AWS Experience",
+          "skill": "AWS",
+          "isMandatory": false
+        },
+        {
+          "id": "req-p-2",
+          "title": "Docker Experience",
+          "skill": "Docker",
+          "isMandatory": false
+        }
+      ],
+      "createdAt": "2026-10-08T12:15:49.210Z"
+    }
+  ],
+  "evaluations": [],
+  "auditLogs": [],
+  "history": [],
+  "users": []
 }

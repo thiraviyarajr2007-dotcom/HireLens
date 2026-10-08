@@ -56,9 +56,15 @@ export default function EvidenceExplorerPage({ candidate, onNavigate, initialFie
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-semibold border border-green-200 flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">verified</span> Analysis Verified
-            </span>
+            {candidate.analysisMode === 'heuristic' ? (
+              <span className="px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-semibold border border-amber-300 flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm text-amber-600">info</span> Heuristic mode (no LLM)
+              </span>
+            ) : (
+              <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-semibold border border-green-200 flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm">verified</span> Analysis Verified
+              </span>
+            )}
 
             <button 
               onClick={() => onNavigate(`/candidate/${candidate.id}`)}
@@ -87,14 +93,16 @@ export default function EvidenceExplorerPage({ candidate, onNavigate, initialFie
             <div className="flex-1 overflow-y-auto p-6 bg-slate-100 font-mono text-xs leading-relaxed text-slate-800">
               <div className="max-w-2xl mx-auto bg-white p-8 border border-slate-200 shadow-md space-y-6 rounded-lg font-sans">
                 <div className="border-b border-slate-200 pb-4">
-                  <h1 className="text-2xl font-bold text-[#0B1C30]">{candidate.name}</h1>
-                  <p className="text-xs text-slate-500 mt-1">{candidate.role} | {candidate.location} | {candidate.email}</p>
+                  <h1 className="text-2xl font-bold text-[#0B1C30]">{candidate.name || 'Candidate'}</h1>
+                  <p className="text-xs text-slate-500 mt-1">
+                    {candidate.role || 'Not found in resume'} | {candidate.location || 'Not found in resume'} | {candidate.email || 'Not found in resume'}
+                  </p>
                 </div>
 
                 <div className="space-y-2">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Professional Summary</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Experienced software engineer with strong technical background in full-stack architecture, clean coding practices, and evidence-driven development.
+                    {candidate.candidateSummary || "Evidence-based candidate profile."}
                   </p>
                 </div>
 
@@ -113,16 +121,16 @@ export default function EvidenceExplorerPage({ candidate, onNavigate, initialFie
                 <div className="space-y-3">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Work Experience & Projects</h3>
                   <div className="text-xs text-slate-700 space-y-1">
-                    <p className="font-bold text-[#0B1C30]">{candidate.extractedProfile?.latestExperience}</p>
+                    <p className="font-bold text-[#0B1C30]">{candidate.extractedProfile?.latestExperience || "Not found in resume"}</p>
                     <p className="text-slate-600">
-                      Demonstrated leadership in technical initiatives, database optimization, and API service delivery.
+                      Grounded candidate employment and project timeline records.
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Education</h3>
-                  <p className="text-xs text-slate-700">{candidate.extractedProfile?.education}</p>
+                  <p className="text-xs text-slate-700">{candidate.extractedProfile?.education || "Not found in resume"}</p>
                 </div>
               </div>
             </div>

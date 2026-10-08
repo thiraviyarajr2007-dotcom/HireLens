@@ -16,15 +16,16 @@ function normalizeName(name) {
 
 /**
  * Internal Identity Matching Service:
- * Matches candidate extracted info against existing profiles and consolidates under ONE candidate.
+ * Matches candidate extracted info against existing profiles and consolidates records.
+ * Uses high-precision signals (exact Email, clean Phone, exact LinkedIn).
+ * Avoids false merges from loose 6-character substrings.
+ * Fully synchronizes all extracted and evaluation fields on updates (B8).
  */
 export function matchAndUpdateCandidate(newCandidate, existingCandidates = []) {
   const normEmail = normalizeEmail(newCandidate.email);
   const normPhone = normalizePhone(newCandidate.phone);
   const normLinkedin = normalizeLinkedin(newCandidate.linkedin);
   const normName = normalizeName(newCandidate.name);
-  const inst = (newCandidate.extractedProfile?.education || '').toLowerCase();
-  const company = (newCandidate.extractedProfile?.latestExperience || '').toLowerCase();
 
   let matchedCandidate = null;
 
@@ -33,15 +34,13 @@ export function matchAndUpdateCandidate(newCandidate, existingCandidates = []) {
     const cPhone = normalizePhone(candidate.phone);
     const cLinkedin = normalizeLinkedin(candidate.linkedin);
     const cName = normalizeName(candidate.name);
-    const cInst = (candidate.extractedProfile?.education || '').toLowerCase();
-    const cCompany = (candidate.extractedProfile?.latestExperience || '').toLowerCase();
 
-    // 1. Strong Signals (Exact Email, Phone, LinkedIn)
+    // 1. Strong Primary Identifiers (Unique Email, Phone >= 10 digits, LinkedIn)
     if (normEmail && cEmail && normEmail === cEmail) {
       matchedCandidate = candidate;
       break;
     }
-    if (normPhone && cPhone && normPhone.length > 5 && normPhone === cPhone) {
+    if (normPhone && cPhone && normPhone.length >= 10 && normPhone === cPhone) {
       matchedCandidate = candidate;
       break;
     }
@@ -50,17 +49,34 @@ export function matchAndUpdateCandidate(newCandidate, existingCandidates = []) {
       break;
     }
 
-    // 2. Additional Signals (Name + Context)
-    if (normName && cName && normName === cName) {
-      let signalCount = 0;
-      if (inst && cInst && (inst.includes(cInst.slice(0, 6)) || cInst.includes(inst.slice(0, 6)))) signalCount++;
-      if (company && cCompany && (company.includes(cCompany.slice(0, 6)) || cCompany.includes(company.slice(0, 6)))) signalCount++;
-      if (signalCount >= 1) {
+    // 2. Exact Full Name Match ONLY if corroborated by exact secondary signal (B8: strict matching)
+    if (normName && cName && normName.length >= 5 && normName === cName) {
+      const cInst = (candidate.extractedProfile?.education || '').toLowerCase().trim();
+      const nInst = (newCandidate.extractedProfile?.education || '').toLowerCase().trim();
+      const cComp = (candidate.extractedProfile?.latestExperience || '').toLowerCase().trim();
+      const nComp = (newCandidate.extractedProfile?.latestExperience || '').toLowerCase().trim();
+
+      // Require exact normalized institutional or company tokens (minimum 10 characters)
+      const exactSchool = cInst.length >= 10 && nInst.length >= 10 && (cInst === nInst);
+      const exactCompany = cComp.length >= 10 && nComp.length >= 10 && (cComp === nComp);
+
+      if (exactSchool || exactCompany) {
         matchedCandidate = candidate;
         break;
       }
     }
   }
+
+  // Manage multi-job evaluation history (B9)
+  const currentEvaluation = {
+    jobId: newCandidate.jobId || 'job_default',
+    jobTitle: newCandidate.role || 'General Evaluation',
+    evaluationId: newCandidate.evaluationId || ('eval_' + Date.now()),
+    fitScore: newCandidate.fitScore,
+    fitStatus: newCandidate.fitStatus,
+    recommendation: newCandidate.recommendation,
+    date: new Date().toISOString()
+  };
 
   if (matchedCandidate) {
     const docName = newCandidate.documents?.[0]?.name || "Updated_Resume.pdf";
@@ -73,22 +89,45 @@ export function matchAndUpdateCandidate(newCandidate, existingCandidates = []) {
       ...existingDocs.filter(d => d.name !== docName)
     ];
 
+    // Maintain evaluations across jobs without overwriting other JDs (B9)
+    const existingEvals = matchedCandidate.evaluations || [];
+    const updatedEvals = [
+      currentEvaluation,
+      ...existingEvals.filter(e => e.jobId !== currentEvaluation.jobId)
+    ];
+
+    // Update ALL evaluation and extracted fields (B8: no stale data)
     const updatedCandidate = {
       ...matchedCandidate,
+      name: newCandidate.name || matchedCandidate.name,
+      role: newCandidate.role || matchedCandidate.role,
+      location: newCandidate.location !== undefined ? newCandidate.location : matchedCandidate.location,
+      email: newCandidate.email || matchedCandidate.email,
+      phone: newCandidate.phone || matchedCandidate.phone,
+      linkedin: newCandidate.linkedin || matchedCandidate.linkedin,
+      avatar: newCandidate.avatar || matchedCandidate.avatar || null,
       fitScore: newCandidate.fitScore,
       fitStatus: newCandidate.fitStatus,
       recommendation: newCandidate.recommendation,
+      candidateSummary: newCandidate.candidateSummary,
+      keyStrengths: newCandidate.keyStrengths || [],
+      criticalGaps: newCandidate.criticalGaps || [],
+      experienceLevelMatch: newCandidate.experienceLevelMatch || { required: 'N/A', evaluated: 'N/A', assessment: 'Adequate' },
+      targetedInterviewQuestions: newCandidate.targetedInterviewQuestions || { technical: [], behavioral: [] },
       skillsMatch: newCandidate.skillsMatch,
       experienceMatch: newCandidate.experienceMatch,
       educationMatch: newCandidate.educationMatch,
       mainStrength: newCandidate.mainStrength,
       mainGap: newCandidate.mainGap,
-      matchedRequirements: newCandidate.matchedRequirements,
-      missingRequirements: newCandidate.missingRequirements,
+      extractedProfile: newCandidate.extractedProfile || matchedCandidate.extractedProfile,
+      matchedRequirements: newCandidate.matchedRequirements || [],
+      missingRequirements: newCandidate.missingRequirements || [],
       evidenceFields: {
         ...matchedCandidate.evidenceFields,
         ...newCandidate.evidenceFields
       },
+      evaluations: updatedEvals,
+      analysisMode: newCandidate.analysisMode || 'heuristic',
       documents: updatedDocs,
       resumeText: newCandidate.resumeText || matchedCandidate.resumeText,
       updatedAt: new Date().toISOString()
@@ -96,9 +135,10 @@ export function matchAndUpdateCandidate(newCandidate, existingCandidates = []) {
 
     return { candidate: updatedCandidate, isExisting: true };
   } else {
-    const docName = newCandidate.documents?.[0]?.name || `${newCandidate.name.replace(/\s+/g, "_")}_Resume.pdf`;
+    const docName = newCandidate.documents?.[0]?.name || `${(newCandidate.name || 'Candidate').replace(/\s+/g, "_")}_Resume.pdf`;
     const freshCandidate = {
       ...newCandidate,
+      evaluations: [currentEvaluation],
       documents: [{ name: docName, date: new Date().toISOString().split('T')[0] }],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()

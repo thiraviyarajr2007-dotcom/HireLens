@@ -1,0 +1,26 @@
+[SYNTHETIC TEST FIXTURE — DO NOT USE AS REAL RECRUITING DATA]
+Candidate: Alice Johnson
+Email: alice.johnson.synthetic@example.org
+Phone: (415) 555-0142
+Location: San Francisco, CA
+LinkedIn: linkedin.com/in/alice-johnson-synth
+
+SUMMARY
+Senior full-stack software engineer with 5 years of experience building distributed web applications in React, TypeScript, and Node.js.
+
+TECHNICAL SKILLS
+React, TypeScript, Node.js, PostgreSQL, Docker, AWS, GraphQL, REST API
+
+EDUCATION
+B.S. in Computer Science
+Stanford University (Graduated 2019)
+
+EXPERIENCE
+Senior Software Engineer — CloudVenture (2022 - Present)
+- Designed and scaled high-throughput REST APIs handling 40,000 req/s with 99.99% availability.
+- Led migration of frontend architecture to React 18, reducing initial page load time by 32%.
+- Mentored junior engineers and managed Docker container deployments on AWS ECS.
+
+Software Engineer — ByteStack (2019 - 2022)
+- Implemented core database schemas and complex queries using PostgreSQL.
+- Developed real-time analytics dashboard with React and WebSockets.

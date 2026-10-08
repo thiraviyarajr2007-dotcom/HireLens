@@ -1,0 +1,33 @@
+name: HireLens CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Deterministic Unit & Grounding Tests
+        run: npm test
+
+      - name: Run Counterfactual Bias Testing Suite
+        run: npm run bias:test
+
+      - name: Build Frontend Application Bundle
+        run: npm run build

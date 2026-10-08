@@ -129,26 +129,121 @@ export function sanitizePII(text) {
     .replace(/github\.com\/[a-zA-Z0-9_-]+/gi, 'github.com/[REDACTED]');
 }
 
+function computeDiceCoefficient(a, b) {
+  if (a === b) return 1;
+  if (!a || !b) return 0;
+  const bigrams = new Map();
+  for (let i = 0; i < a.length - 1; i++) {
+    const bg = a.slice(i, i + 2);
+    bigrams.set(bg, (bigrams.get(bg) || 0) + 1);
+  }
+  let intersection = 0;
+  for (let i = 0; i < b.length - 1; i++) {
+    const bg = b.slice(i, i + 2);
+    const count = bigrams.get(bg) || 0;
+    if (count > 0) {
+      bigrams.set(bg, count - 1);
+      intersection++;
+    }
+  }
+  return (2 * intersection) / ((a.length - 1) + (b.length - 1));
+}
+
+/**
+ * Extracts a genuine excerpt from raw resume text for a matched keyword.
+ * Never invents fake evidence.
+ */
+function findRealEvidenceSnippet(rawText, keyword) {
+  if (!rawText || !keyword) return null;
+  const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const escaped = keyword.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const regex = new RegExp(`\\b${escaped}\\b`, 'i');
+
+  for (const line of lines) {
+    if (regex.test(line)) {
+      return line.length > 180 ? line.slice(0, 180) + '...' : line;
+    }
+  }
+  return null;
+}
+
 /**
  * Verbatim Grounding Verification: Confirms that evidence strings returned by the LLM
  * genuinely exist as verbatim substrings in the original unredacted resume text.
+ * Requires the whole quote to match (or >=0.92 Dice similarity for whitespace/token variations).
  */
 export function verifyVerbatimGrounding(requirements, originalResumeText) {
   if (!requirements || !Array.isArray(requirements)) return [];
-  const normalizedRaw = (originalResumeText || '').toLowerCase().replace(/\s+/g, ' ');
+  const rawText = originalResumeText || '';
+  const normalizedRaw = rawText.toLowerCase().replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/\s+/g, ' ');
 
   return requirements.map(req => {
-    if (!req.evidence) {
-      return { ...req, isVerbatimVerified: false, confidenceFactor: 0.5 };
+    if (!req.evidence || typeof req.evidence !== 'string' || req.evidence.trim().length === 0) {
+      return {
+        ...req,
+        isVerbatimVerified: false,
+        confidenceFactor: 0,
+        groundingStatus: 'UNVERIFIED',
+        charStart: -1,
+        charEnd: -1
+      };
     }
-    // Clean snippet for flexible substring verification
-    const cleanSnippet = req.evidence.toLowerCase().replace(/quoted from resume:?|['"]/gi, '').trim().replace(/\s+/g, ' ');
-    const isVerified = cleanSnippet.length > 5 && normalizedRaw.includes(cleanSnippet.slice(0, 30));
+
+    const cleanQuote = req.evidence
+      .replace(/quoted from resume:?|['"]/gi, '')
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+
+    if (cleanQuote.length < 4) {
+      return {
+        ...req,
+        isVerbatimVerified: false,
+        confidenceFactor: 0,
+        groundingStatus: 'UNVERIFIED',
+        charStart: -1,
+        charEnd: -1
+      };
+    }
+
+    const exactIdx = normalizedRaw.indexOf(cleanQuote);
+    const isExact = exactIdx !== -1;
+
+    let isVerified = isExact;
+    let charStart = isExact ? exactIdx : -1;
+    let charEnd = isExact ? exactIdx + cleanQuote.length : -1;
+    let groundingStatus = isExact ? 'VERIFIED_EXACT' : 'UNVERIFIED';
+
+    // Fuzzy check if exact substring not found
+    if (!isExact && cleanQuote.length > 15) {
+      const words = cleanQuote.split(' ');
+      if (words.length >= 3) {
+        const firstTwo = words.slice(0, 2).join(' ');
+        const lastTwo = words.slice(-2).join(' ');
+        const firstIdx = normalizedRaw.indexOf(firstTwo);
+        const lastIdx = normalizedRaw.indexOf(lastTwo, firstIdx + 1);
+        if (firstIdx !== -1 && lastIdx !== -1 && (lastIdx - firstIdx) <= cleanQuote.length * 1.3) {
+          const matchedSpan = normalizedRaw.slice(firstIdx, lastIdx + lastTwo.length);
+          const similarity = computeDiceCoefficient(cleanQuote, matchedSpan);
+          if (similarity >= 0.92) {
+            isVerified = true;
+            charStart = firstIdx;
+            charEnd = lastIdx + lastTwo.length;
+            groundingStatus = 'VERIFIED_FUZZY';
+          }
+        }
+      }
+    }
 
     return {
       ...req,
       isVerbatimVerified: isVerified,
-      confidenceFactor: isVerified ? 1.0 : 0.65
+      confidenceFactor: isVerified ? (groundingStatus === 'VERIFIED_EXACT' ? 1.0 : 0.92) : 0,
+      groundingStatus,
+      charStart,
+      charEnd
     };
   });
 }
@@ -158,9 +253,9 @@ export function verifyVerbatimGrounding(requirements, originalResumeText) {
  * Final Score = (0.45 * S_skills) + (0.35 * S_experience) + (0.20 * S_impact)
  */
 export function calculateDeterministicScore(skillsScore, experienceScore, impactScore) {
-  const sSkills = Math.min(100, Math.max(0, Number(skillsScore) || 70));
-  const sExp = Math.min(100, Math.max(0, Number(experienceScore) || 70));
-  const sImpact = Math.min(100, Math.max(0, Number(impactScore) || 70));
+  const sSkills = Math.min(100, Math.max(0, Number(skillsScore) || 0));
+  const sExp = Math.min(100, Math.max(0, Number(experienceScore) || 0));
+  const sImpact = Math.min(100, Math.max(0, Number(impactScore) || 0));
 
   return Math.round((0.45 * sSkills) + (0.35 * sExp) + (0.20 * sImpact));
 }
@@ -169,32 +264,20 @@ export function calculateDeterministicScore(skillsScore, experienceScore, impact
  * Standardizes AI JSON output into HireLens internal candidate model format
  */
 function formatAiEvaluationResult(aiData, fallbackFields, originalResumeText) {
-  // Derive sub-scores
   const rawScore = Number(aiData.match_score) || 75;
-  const skillsScore = Math.min(100, rawScore + 4);
-  const experienceScore = Math.max(50, rawScore - 6);
+  const skillsScore = Math.min(100, Math.max(0, rawScore));
+  const experienceScore = Math.min(100, Math.max(0, rawScore - 5));
   
-  // Calculate impact score based on quantified metrics in strengths
   const hasQuantifiedMetrics = (aiData.key_strengths || []).some(s => /\d+%|\$\d+|\b\d+x\b|\b\d+\s*(ms|k|m|tps)\b/i.test(s));
-  const impactScore = hasQuantifiedMetrics ? 88 : 72;
+  const impactScore = hasQuantifiedMetrics ? 85 : 65;
 
-  // Compute final score using the deterministic formula
   const finalScore = calculateDeterministicScore(skillsScore, experienceScore, impactScore);
   const fitStatus = finalScore >= 85 ? 'Strong Match' : finalScore >= 70 ? 'Moderate Match' : 'Partial Match';
 
-  // Verbatim grounding verification
-  const verifiedMatched = verifyVerbatimGrounding(aiData.matched_requirements || [
-    {
-      id: 'req-1',
-      title: 'Core Technical Stack Match',
-      status: 'MATCHED',
-      explanation: 'Verified active production implementation in candidate resume.',
-      fieldId: 'SKILLS-LIST',
-      evidence: (aiData.key_strengths && aiData.key_strengths[0]) || 'Documented in candidate achievements.'
-    }
-  ], originalResumeText);
+  const verifiedMatched = verifyVerbatimGrounding(aiData.matched_requirements || [], originalResumeText);
 
   return {
+    analysisMode: 'ai',
     fitScore: finalScore,
     fitStatus,
     recommendation: aiData.candidate_summary || `${fitStatus}. Evaluated by HireLens AI Engine.`,
@@ -205,25 +288,18 @@ function formatAiEvaluationResult(aiData, fallbackFields, originalResumeText) {
     targetedInterviewQuestions: aiData.targeted_interview_questions || { technical: [], behavioral: [] },
     skillsMatch: skillsScore,
     experienceMatch: experienceScore,
-    educationMatch: 88,
+    educationMatch: fallbackFields?.education ? 85 : 0,
     impactMatch: impactScore,
-    mainStrength: (aiData.key_strengths && aiData.key_strengths[0]) || 'Strong Technical Stack Alignment',
-    mainGap: (aiData.critical_gaps && aiData.critical_gaps[0]) || 'Secondary framework experience unverified',
+    mainStrength: (aiData.key_strengths && aiData.key_strengths[0]) || 'Technical Alignment',
+    mainGap: (aiData.critical_gaps && aiData.critical_gaps[0]) || 'Domain experience to be confirmed in interview',
     matchedRequirements: verifiedMatched,
-    missingRequirements: aiData.missing_requirements || [
-      {
-        id: 'gap-1',
-        title: 'Cloud Infrastructure / Distributed Deployment',
-        status: 'NOT_FOUND',
-        explanation: (aiData.critical_gaps && aiData.critical_gaps[0]) || 'No explicit evidence found in resume text.',
-        fieldId: 'API-EXP'
-      }
-    ]
+    missingRequirements: aiData.missing_requirements || []
   };
 }
 
 /**
- * Offline Intelligent Heuristic Generator (Zero-Break Fallback)
+ * Heuristic Evaluation Mode (No LLM):
+ * Transparent heuristic matching without fabricated evidence strings.
  */
 function generateOfflineEvaluation(resumeText, jobDescription, fallbackFields) {
   const jdLower = (jobDescription || '').toLowerCase();
@@ -233,63 +309,77 @@ function generateOfflineEvaluation(resumeText, jobDescription, fallbackFields) {
   const matched = coreKeywords.filter(kw => jdLower.includes(kw) && resLower.includes(kw));
   const missing = coreKeywords.filter(kw => jdLower.includes(kw) && !resLower.includes(kw));
 
-  const sSkills = Math.min(100, Math.max(50, 58 + matched.length * 6));
-  const sExp = 78;
-  const sImpact = (resLower.includes('%') || resLower.includes('latency') || resLower.includes('scale')) ? 85 : 70;
+  const totalEvaluated = matched.length + missing.length;
+  const sSkills = totalEvaluated > 0 ? Math.round((matched.length / totalEvaluated) * 100) : 50;
+  
+  // Real experience estimation from parsed date ranges
+  const dateRanges = (resumeText || '').match(/\b(20\d{2})\s*[-–—]\s*(20\d{2}|present|current)\b/gi) || [];
+  const sExp = dateRanges.length >= 3 ? 85 : dateRanges.length >= 1 ? 70 : 40;
+
+  // Impact: real quantified metrics search
+  const hasMetrics = /\d+%|\$\d+|\b\d+x\b|\b\d+\s*(ms|k|m|tps)\b/i.test(resumeText || '');
+  const sImpact = hasMetrics ? 80 : 50;
+
   const score = calculateDeterministicScore(sSkills, sExp, sImpact);
   const fitStatus = score >= 85 ? 'Strong Match' : score >= 70 ? 'Moderate Match' : 'Partial Match';
 
+  // Extract genuine quotes from resume text (never fake strings)
+  const matchedRequirements = matched.map((kw, i) => {
+    const realSnippet = findRealEvidenceSnippet(resumeText, kw);
+    const hasEvidence = Boolean(realSnippet);
+    return {
+      id: `req-${i + 1}`,
+      title: `${kw.toUpperCase()} Implementation`,
+      status: 'MATCHED',
+      explanation: hasEvidence ? `Identified in resume text: "${realSnippet}"` : `Keyword ${kw} detected.`,
+      fieldId: 'SKILLS-LIST',
+      evidence: realSnippet,
+      isVerbatimVerified: hasEvidence,
+      confidenceFactor: hasEvidence ? 1.0 : 0.6
+    };
+  });
+
+  const missingRequirements = missing.map((kw, i) => ({
+    id: `gap-${i + 1}`,
+    title: `${kw.toUpperCase()} Experience`,
+    status: 'NOT_FOUND',
+    explanation: `No mention of ${kw} found in the uploaded resume.`,
+    fieldId: 'SKILLS-LIST'
+  }));
+
   return {
+    analysisMode: 'heuristic',
+    fallbackReason: 'Heuristic mode (no LLM)',
     fitScore: score,
     fitStatus,
-    recommendation: `${fitStatus}. Candidate demonstrates verifiable alignment in ${matched.slice(0, 3).join(', ') || 'core stack'}.`,
-    candidateSummary: `Candidate presents verified hands-on experience in ${matched.join(', ') || 'primary software skills'}. Core foundations match the job requirements with minor gaps in ${missing.slice(0, 2).join(' and ') || 'cloud deployment'}.`,
-    keyStrengths: [
-      `Demonstrated proficiency in ${matched.slice(0, 3).join(', ')} matching mandatory JD requirements.`,
-      `Extracted practical experience with structured API and database integrations.`
-    ],
+    recommendation: `${fitStatus}. Evaluated in Heuristic Mode (no LLM). Keyword alignment identified in ${matched.slice(0, 3).join(', ') || 'stack'}.`,
+    candidateSummary: `Evaluated using heuristic keyword matching. Identified alignment in ${matched.join(', ') || 'detected skills'}. Gaps noted in ${missing.slice(0, 2).join(' and ') || 'none'}.`,
+    keyStrengths: matched.length > 0 ? [
+      `Grounded occurrences in resume: ${matched.slice(0, 4).join(', ')}.`,
+      hasMetrics ? 'Quantified impact metrics present in resume.' : 'Technical terms detected across experience entries.'
+    ] : ['Resume parsed, no core JD tech keywords detected.'],
     criticalGaps: missing.length > 0 
-      ? [`Missing explicit production experience in: ${missing.join(', ')}.`] 
-      : ['Distributed systems scale metrics could be further substantiated during technical interview.'],
+      ? [`Missing JD requirements: ${missing.join(', ')}.`] 
+      : ['Candidate matches evaluated keywords; recommend technical screening.'],
     experienceLevelMatch: {
-      required: '3+ years',
-      evaluated: '~3 years',
-      assessment: 'Adequate'
+      required: 'Per JD',
+      evaluated: `${dateRanges.length} verifiable role periods detected`,
+      assessment: dateRanges.length >= 2 ? 'Adequate' : 'Underqualified'
     },
     targetedInterviewQuestions: {
-      technical: [
-        `Can you walk us through the architectural trade-offs you considered when choosing ${matched[0] || 'your core stack'} for your most recent project?`,
-        `How have you handled high-traffic bottlenecks, database connection pooling, or query optimization in production?`,
-        missing.length > 0 
-          ? `Our JD emphasizes ${missing[0]}. Have you had exposure to this or similar paradigms in personal projects or prior roles?`
-          : `Explain your testing and CI/CD strategy for zero-downtime deployments.`
-      ],
+      technical: matched.slice(0, 2).map(kw => `Can you elaborate on your production experience with ${kw}?`),
       behavioral: [
-        `Describe a situation where a critical bug slipped into production. How did you coordinate the hotfix and communicate with stakeholders?`,
-        `Tell us about a technical disagreement you had with an architect or peer. How did you find alignment?`
+        'Describe a complex project failure and how your team resolved the blockers.',
+        'How do you validate code quality and performance in your daily workflow?'
       ]
     },
     skillsMatch: sSkills,
     experienceMatch: sExp,
-    educationMatch: 90,
+    educationMatch: fallbackFields?.education ? 85 : 0,
     impactMatch: sImpact,
-    mainStrength: `Core Stack: ${matched.slice(0, 2).join(' & ') || 'Technical Alignment'}`,
-    mainGap: missing.length > 0 ? `Unverified: ${missing.join(', ')}` : 'Advanced Cloud Tuning',
-    matchedRequirements: matched.map((kw, i) => ({
-      id: `req-${i + 1}`,
-      title: `${kw.toUpperCase()} Implementation`,
-      status: 'MATCHED',
-      explanation: `Extracted direct evidence of ${kw} usage in resume text.`,
-      fieldId: 'SKILLS-LIST',
-      evidence: `Verified occurrence of "${kw}" in candidate experience history.`,
-      isVerbatimVerified: true
-    })),
-    missingRequirements: missing.map((kw, i) => ({
-      id: `gap-${i + 1}`,
-      title: `${kw.toUpperCase()} Production Experience`,
-      status: 'NOT_FOUND',
-      explanation: `No supporting evidence found in candidate resume text for ${kw}.`,
-      fieldId: 'API-EXP'
-    }))
+    mainStrength: matched.length > 0 ? `Core Stack: ${matched.slice(0, 2).join(' & ')}` : 'Profile Parsed',
+    mainGap: missing.length > 0 ? `Unverified: ${missing.join(', ')}` : 'None',
+    matchedRequirements,
+    missingRequirements
   };
 }

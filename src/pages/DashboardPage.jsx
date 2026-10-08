@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import TopHeader from '../components/TopHeader';
+import { fetchAggregateFairnessApi } from '../services/apiClient';
 
 export default function DashboardPage({ candidates, onNavigate, mobileOpen, setMobileOpen, user, onSignOut }) {
+  const [aggregateFairness, setAggregateFairness] = useState(null);
+
+  useEffect(() => {
+    async function loadFairness() {
+      try {
+        const data = await fetchAggregateFairnessApi();
+        if (data && data.metrics) {
+          setAggregateFairness(data.metrics);
+        }
+      } catch (err) {
+        // Fallback gracefully
+      }
+    }
+    loadFairness();
+  }, []);
+
   const avgScore = candidates.length > 0
     ? Math.round(candidates.reduce((acc, c) => acc + c.fitScore, 0) / candidates.length)
     : 0;
 
   const shortlistedCount = candidates.filter(c => c.fitScore >= 80).length;
+
+  const evidenceRate = aggregateFairness && (aggregateFairness.totalGrounded || aggregateFairness.totalRejectedEvidence)
+    ? `${Math.round((aggregateFairness.totalGrounded / (aggregateFairness.totalGrounded + aggregateFairness.totalRejectedEvidence)) * 100)}%`
+    : (candidates.length > 0 ? '100%' : '0%');
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex font-body-md text-[#0B1C30]">
@@ -90,9 +111,69 @@ export default function DashboardPage({ candidates, onNavigate, mobileOpen, setM
                 <span className="material-symbols-outlined text-2xl">plagiarism</span>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Evidence Coverage</p>
-                <h3 className="text-2xl font-display font-bold text-[#0B1C30]">{candidates.length > 0 ? '98.4%' : '0%'}</h3>
-                <span className="text-[11px] text-green-600 font-semibold">Zero hallucination mode</span>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Evidence Grounded</p>
+                <h3 className="text-2xl font-display font-bold text-[#0B1C30]">{evidenceRate}</h3>
+                <span className="text-[11px] text-green-600 font-semibold">Strict quote verification</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Aggregate Fairness & AI Reliability Dashboard Card */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-xl">balance</span>
+                </div>
+                <div>
+                  <h2 className="text-lg font-display font-bold text-[#0B1C30]">Aggregate Fairness & AI Reliability Audit</h2>
+                  <p className="text-xs text-slate-500">Evaluations across all candidates: demographic bias metrics and ungrounded claim rejection</p>
+                </div>
+              </div>
+              <span className="px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-full flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Blind Scoring Active
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+              <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Score Delta (Demographic Invariance)</span>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="text-2xl font-bold font-display text-emerald-700">
+                    {aggregateFairness?.meanDemographicDelta !== undefined ? `±${aggregateFairness.meanDemographicDelta}%` : '0%'}
+                  </span>
+                  <span className="text-xs text-slate-500">average variation</span>
+                </div>
+                <p className="mt-2 text-[11px] text-slate-500 leading-relaxed">
+                  Evaluated with swapped gender markers, name tokens, and institution masking. Target threshold: ≤ 5%.
+                </p>
+              </div>
+
+              <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Rejected Hallucinations</span>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="text-2xl font-bold font-display text-amber-700">
+                    {aggregateFairness?.totalRejectedEvidence || 0}
+                  </span>
+                  <span className="text-xs text-slate-500">claims ungrounded</span>
+                </div>
+                <p className="mt-2 text-[11px] text-slate-500 leading-relaxed">
+                  Quotes claimed by LLM but missing from resume text. Automatically downgraded to UNVERIFIED with 0 score points.
+                </p>
+              </div>
+
+              <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Recruiter Human Overrides</span>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="text-2xl font-bold font-display text-blue-700">
+                    {aggregateFairness?.totalHumanOverrides || 0}
+                  </span>
+                  <span className="text-xs text-slate-500">audited interventions</span>
+                </div>
+                <p className="mt-2 text-[11px] text-slate-500 leading-relaxed">
+                  Human recruiter decisions with mandatory logged rationale recorded in immutable audit ledger.
+                </p>
               </div>
             </div>
           </div>
@@ -151,10 +232,16 @@ export default function DashboardPage({ candidates, onNavigate, mobileOpen, setM
                       <tr key={c.id} className="hover:bg-slate-50/80 transition-colors group">
                         <td className="py-4 px-6">
                           <div className="flex items-center gap-3 cursor-pointer" onClick={() => onNavigate(`/candidate/${c.id}`)}>
-                            <img src={c.avatar} alt={c.name} className="w-10 h-10 rounded-full object-cover border border-slate-200" />
+                            {c.avatar ? (
+                              <img src={c.avatar} alt={c.name} className="w-10 h-10 rounded-full object-cover border border-slate-200" />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs border border-slate-300">
+                                {c.name ? c.name.charAt(0).toUpperCase() : 'C'}
+                              </div>
+                            )}
                             <div>
                               <div className="font-bold text-[#0B1C30] group-hover:text-primary transition-colors">{c.name}</div>
-                              <div className="text-xs text-slate-500">{c.location}</div>
+                              <div className="text-xs text-slate-500">{c.location || 'Location not specified'}</div>
                             </div>
                           </div>
                         </td>

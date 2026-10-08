@@ -138,6 +138,29 @@
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+    /* Print Stylesheet for PDF Export (Phase 5) */
+    @media print {
+      aside, nav, header, button, .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: #ffffff !important;
+        color: #0b1c30 !important;
+      }
+      .md\:ml-\[280px\] {
+        margin-left: 0 !important;
+      }
+      .shadow-sm, .shadow-md, .shadow-xl {
+        box-shadow: none !important;
+      }
+      .border {
+        border-color: #e2e8f0 !important;
+      }
+      .print-break {
+        page-break-after: always;
+      }
+    }
+
     /* Glassmorphism & Visual Tokens */
     .glass-card {
       background: rgba(255, 255, 255, 0.85);
